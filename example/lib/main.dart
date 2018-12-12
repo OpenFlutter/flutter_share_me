@@ -9,7 +9,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,10 +20,13 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             RaisedButton(
               child: Text('share to twitter'),
-              onPressed: () {
-                FlutterShareMe.shareToTwitter(
+              onPressed: () async {
+                var response = await FlutterShareMe.shareToTwitter(
                     url: 'https://github.com/lizhuoyuan',
                     msg: 'hello flutter! ');
+                if (response == 'success') {
+                  print('navigate success');
+                }
               },
             ),
             RaisedButton(
@@ -32,7 +34,7 @@ class _MyAppState extends State<MyApp> {
               onPressed: () {
                 FlutterShareMe.shareToWhatsApp(
                     msg:
-                    'hello,this is my github:https://github.com/lizhuoyuan');
+                        'hello,this is my github:https://github.com/lizhuoyuan');
               },
             ),
             RaisedButton(
@@ -44,8 +46,11 @@ class _MyAppState extends State<MyApp> {
             ),
             RaisedButton(
               child: Text('share to System'),
-              onPressed: () {
-                FlutterShareMe.shareToSystem(msg: 'Hello Flutter');
+              onPressed: () async{
+                var response = await FlutterShareMe.shareToSystem(msg: 'Hello Flutter');
+                if (response == 'success') {
+                  print('navigate success');
+                }
               },
             ),
           ],

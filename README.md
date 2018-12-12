@@ -21,6 +21,8 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 ##### shareToWhatsApp({String msg})
 ##### shareToSystem({String msg})
 
+These methods will return "success" if they successfully jump to the corresponding app.
+
 | Parameter  | Description  |
 
 | :------------ | :------------ |

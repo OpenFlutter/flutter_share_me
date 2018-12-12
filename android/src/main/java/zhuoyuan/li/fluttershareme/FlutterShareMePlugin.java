@@ -49,9 +49,6 @@ public class FlutterShareMePlugin implements MethodCallHandler {
     String url, msg;
 
     switch (call.method) {
-      case "getPlatformVersion":
-        result.success("Android " + android.os.Build.VERSION.RELEASE);
-        break;
       case "shareFacebook":
         url = call.argument("url");
         msg = call.argument("msg");
