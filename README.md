@@ -11,7 +11,8 @@ Note: This plugin is still under development, and some APIs might not be availab
 
 ## Usage
 
-add `flutter_share_me` as a dependency in your pubspec.yaml file.
+#### add `flutter_share_me` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+
 ```
 import 'package:flutter_share_me/flutter_share_me.dart';
 ```
