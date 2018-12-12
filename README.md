@@ -32,7 +32,7 @@ These methods will return "success" if they successfully jump to the correspondi
 | String url  | Url url  |
 
 
-## Example
+## example
 ```
 Column(
           children: <Widget>[
