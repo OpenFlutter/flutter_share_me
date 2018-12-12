@@ -15,7 +15,7 @@ add `flutter_share_me` as a dependency in your pubspec.yaml file.
 import 'package:flutter_share_me/flutter_share_me.dart';
 ```
 
-​#### Methods
+#### Methods
 
 ##### shareToFacebook({String url, String msg})
 ##### shareToTwitter({String url, String msg})
