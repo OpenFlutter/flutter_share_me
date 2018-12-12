@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="zhuoyuan.li.fluttershareme">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="343254889799245" />
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider343254889799245"
+            android:exported="true" />
+    </application>
+</manifest>
