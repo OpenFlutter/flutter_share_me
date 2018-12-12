@@ -1,26 +1,27 @@
 # flutter_share_me
 Flutter Plugin for sharing contents to social media.
 
-#### Compatible
-You can use it share to Facebook , WhatsApp , Twitter And System Share UI. <br/>
+### Compatible
+####You can use it share to Facebook , WhatsApp , Twitter And System Share UI. 
+
 Only Android because I don't have a Mac. <br/>
 
 Note: This plugin is still under development, and some APIs might not be available yet. Feedback and Pull Requests are most welcome!
 ## Getting Started
 
-#### Usage
+## Usage
 
 add `flutter_share_me` as a dependency in your pubspec.yaml file.
 ```
 import 'package:flutter_share_me/flutter_share_me.dart';
 ```
 
-#### Methods
+## Methods
 
-##### shareToFacebook({String url, String msg})
-##### shareToTwitter({String url, String msg})
-##### shareToWhatsApp({String msg})
-##### shareToSystem({String msg})
+#### shareToFacebook({String url, String msg})
+#### shareToTwitter({String url, String msg})
+#### shareToWhatsApp({String msg})
+#### shareToSystem({String msg})
 
 These methods will return "success" if they successfully jump to the corresponding app.
 
@@ -32,7 +33,7 @@ These methods will return "success" if they successfully jump to the correspondi
 
 | String url  | Url url  |
 
-#### Example
+## Example
 ```
 Column(
           children: <Widget>[
