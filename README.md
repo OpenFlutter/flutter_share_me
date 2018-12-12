@@ -26,11 +26,8 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 These methods will return "success" if they successfully jump to the corresponding app.
 
 | Parameter  | Description  |
-
 | :------------ | :------------ |
-
 | String msg  | Text message  |
-
 | String url  | Url url  |
 
 ## Example
