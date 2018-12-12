@@ -9,9 +9,9 @@ Only Android because I don't have a Mac. <br/>
 Note: This plugin is still under development, and some APIs might not be available yet. Feedback and Pull Requests are most welcome!
 ## Getting Started
 
-## Usage
-
 add `flutter_share_me` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+
+## Usage
 
 ```
 import 'package:flutter_share_me/flutter_share_me.dart';
