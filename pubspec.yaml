@@ -1,8 +1,8 @@
 name: flutter_share_me
 description: Flutter Plugin for sharing contents to social media.You can use it share to Facebook , WhatsApp , Twitter And System Share UI. Support Url and Text.
-version: 0.1.1
+version: 0.1.2
 author: LiZhuoyuan <zhuoyuan93@gmail.com>
-homepage: https://github.com/lizhuoyuan/flutter_share_me
+homepage: https://github.com/OpenFlutter/flutter_share_me
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

@@ -18,7 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
   # add flutter_ScreenUtil
-  flutter_share_me: ^0.1.1
+  flutter_share_me: ^0.1.2
 ``` 
 
 ## Usage
