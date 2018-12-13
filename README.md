@@ -1,4 +1,8 @@
 # flutter_share_me
+
+[![pub package](https://img.shields.io/pub/v/flutter_share_me.svg)](https://pub.dartlang.org/packages/flutter_share_me)
+
+
 Flutter Plugin for sharing contents to social media.
 
 You can use it share to Facebook , WhatsApp , Twitter And System Share UI. 
