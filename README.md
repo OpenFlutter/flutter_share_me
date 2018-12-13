@@ -44,7 +44,7 @@ These methods will return "success" if they successfully jump to the correspondi
 | String url  | Url url  |
 
 
-## example
+## Example
 ```
  Column(
           children: <Widget>[
