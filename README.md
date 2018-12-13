@@ -35,9 +35,9 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 
 ## Methods
 
-#### shareToFacebook({String url, String msg})  share to facebook
-#### shareToTwitter({String url, String msg})   share to twitter
-#### shareToWhatsApp({String msg}) share to whatsapp
+#### shareToFacebook({String url, String msg})   
+#### shareToTwitter({String url, String msg})   
+#### shareToWhatsApp({String msg})  
 #### shareToSystem({String msg})   use system share ui
 
 These methods will return "success" if they successfully jump to the corresponding app.
