@@ -35,8 +35,6 @@ android {
 }
 
 dependencies {
-    compileOnly files('libs/android-arm/flutter.jar')
     implementation 'com.facebook.android:facebook-share:[4,5)'
-    implementation 'com.twitter.sdk.android:twitter:3.1.1'
-    //twitter分享
+    implementation 'com.twitter.sdk.android:twitter:3.1.1' //twitter分享
 }
