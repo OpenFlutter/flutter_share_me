@@ -10,7 +10,7 @@ Support Url and Text.
 
 Only Android because I don't have a Mac. 
 
-**Note: This plugin is still under development, and some APIs might not be available yet. Feedback and Pull Requests are most welcome!
+**Note: This plugin is still under development, and some APIs might not be available yet. Feedback and Pull Requests are most welcome!**
 
 ## Getting Started
 
