@@ -12,7 +12,18 @@ Note: This plugin is still under development, and some APIs might not be availab
 
 add `flutter_share_me` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
+Please check the latest version before installation.
+```
+dependencies:
+  flutter:
+    sdk: flutter
+  # add flutter_ScreenUtil
+  flutter_share_me: ^0.1.1
+``` 
+
 ## Usage
+
+#### Add the following imports to your Dart code:
 
 ```
 import 'package:flutter_share_me/flutter_share_me.dart';
