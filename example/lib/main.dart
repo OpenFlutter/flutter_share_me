@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
             RaisedButton(
               child: Text('share to twitter'),
               onPressed: () async {
-                var response = await FlutterShareMe.shareToTwitter(
+                var response = await FlutterShareMe().shareToTwitter(
                     url: 'https://github.com/lizhuoyuan',
                     msg: 'hello flutter! ');
                 if (response == 'success') {
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
             RaisedButton(
               child: Text('share to shareWhatsApp'),
               onPressed: () {
-                FlutterShareMe.shareToWhatsApp(
+                FlutterShareMe().shareToWhatsApp(
                     msg:
                         'hello,this is my github:https://github.com/lizhuoyuan');
               },
@@ -40,14 +40,15 @@ class _MyAppState extends State<MyApp> {
             RaisedButton(
               child: Text('share to shareFacebook'),
               onPressed: () {
-                FlutterShareMe.shareToFacebook(
+                FlutterShareMe().shareToFacebook(
                     url: 'https://github.com/lizhuoyuan', msg: 'Hello Flutter');
               },
             ),
             RaisedButton(
               child: Text('share to System'),
-              onPressed: () async{
-                var response = await FlutterShareMe.shareToSystem(msg: 'Hello Flutter');
+              onPressed: () async {
+                var response =
+                    await FlutterShareMe().shareToSystem(msg: 'Hello Flutter');
                 if (response == 'success') {
                   print('navigate success');
                 }

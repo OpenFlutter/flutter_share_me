@@ -1,8 +1,7 @@
 # flutter_share_me
-Flutter Plugin for sharing contents to social media.
+Flutter Plugin for sharing contents to social media. <br/>
 
-### Compatible
-#### You can use it share to Facebook , WhatsApp , Twitter And System Share UI. 
+You can use it share to Facebook , WhatsApp , Twitter And System Share UI. <br/>
 
 Only Android because I don't have a Mac. <br/>
 
@@ -34,35 +33,42 @@ These methods will return "success" if they successfully jump to the correspondi
 
 ## example
 ```
-Column(
+ Column(
           children: <Widget>[
             RaisedButton(
               child: Text('share to twitter'),
-              onPressed: () {
-                FlutterShareMe.shareToTwitter(
+              onPressed: () async {
+                var response = await FlutterShareMe().shareToTwitter(
                     url: 'https://github.com/lizhuoyuan',
                     msg: 'hello flutter! ');
+                if (response == 'success') {
+                  print('navigate success');
+                }
               },
             ),
             RaisedButton(
               child: Text('share to shareWhatsApp'),
               onPressed: () {
-                FlutterShareMe.shareToWhatsApp(
+                FlutterShareMe().shareToWhatsApp(
                     msg:
-                    'hello,this is my github:https://github.com/lizhuoyuan');
+                        'hello,this is my github:https://github.com/lizhuoyuan');
               },
             ),
             RaisedButton(
               child: Text('share to shareFacebook'),
               onPressed: () {
-                FlutterShareMe.shareToFacebook(
+                FlutterShareMe().shareToFacebook(
                     url: 'https://github.com/lizhuoyuan', msg: 'Hello Flutter');
               },
             ),
             RaisedButton(
               child: Text('share to System'),
-              onPressed: () {
-                FlutterShareMe.shareToSystem(msg: 'Hello Flutter');
+              onPressed: () async {
+                var response =
+                    await FlutterShareMe().shareToSystem(msg: 'Hello Flutter');
+                if (response == 'success') {
+                  print('navigate success');
+                }
               },
             ),
           ],

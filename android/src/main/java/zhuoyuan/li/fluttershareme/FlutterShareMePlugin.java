@@ -27,12 +27,13 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  * FlutterShareMePlugin
  */
 public class FlutterShareMePlugin implements MethodCallHandler {
-    /**
-     * Plugin registration.
-     */
+
     private Activity activity;
     private static CallbackManager callbackManager;
 
+    /**
+     * Plugin registration.
+     */
     private FlutterShareMePlugin(MethodChannel channel, Activity activity) {
         MethodChannel _channel = channel;
         this.activity = activity;
@@ -48,6 +49,12 @@ public class FlutterShareMePlugin implements MethodCallHandler {
         callbackManager = CallbackManager.Factory.create();
     }
 
+    /**
+     * method
+     *
+     * @param call
+     * @param result
+     */
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         String url, msg;
@@ -77,6 +84,12 @@ public class FlutterShareMePlugin implements MethodCallHandler {
         }
     }
 
+    /**
+     * 调用系统分享
+     *
+     * @param msg    String
+     * @param result Result
+     */
     private void shareSystem(Result result, String msg) {
         try {
             Intent textIntent = new Intent("android.intent.action.SEND");
@@ -89,6 +102,13 @@ public class FlutterShareMePlugin implements MethodCallHandler {
         }
     }
 
+    /**
+     * share to twitter
+     *
+     * @param url    String
+     * @param msg    String
+     * @param result Result
+     */
     private void shareToTwitter(String url, String msg, Result result) {
         //这里分享一个链接，更多分享配置参考官方介绍：https://dev.twitter.com/twitterkit/android/compose-tweets
         try {
@@ -105,6 +125,13 @@ public class FlutterShareMePlugin implements MethodCallHandler {
         }
     }
 
+    /**
+     * share to Facebook
+     *
+     * @param url    String
+     * @param msg    String
+     * @param result Result
+     */
     private void shareToFacebook(String url, String msg, Result result) {
         FacebookSdk.setApplicationId("343254889799245");
         FacebookSdk.sdkInitialize(activity.getApplicationContext());
@@ -139,6 +166,12 @@ public class FlutterShareMePlugin implements MethodCallHandler {
 
     }
 
+    /**
+     * share to whatsapp
+     *
+     * @param msg    String
+     * @param result Result
+     */
     private void shareWhatsApp(String msg, Result result) {
         try {
             Intent textIntent;
