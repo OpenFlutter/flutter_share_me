@@ -8,7 +8,13 @@ class FlutterShareMe {
     final Map<String, Object> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
-    return await _channel.invokeMethod('shareFacebook', arguments);
+    dynamic result;
+    try {
+      result = await _channel.invokeMethod('shareFacebook', arguments);
+    } catch (e) {
+      return "false";
+    }
+    return result;
   }
 
   ///share to twitter
@@ -16,20 +22,38 @@ class FlutterShareMe {
     final Map<String, Object> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
-    return await _channel.invokeMethod('shareTwitter', arguments);
+    dynamic result;
+    try {
+      result = await _channel.invokeMethod('shareTwitter', arguments);
+    } catch (e) {
+      return "false";
+    }
+    return result;
   }
 
   ///share to whatsapp
   Future<String> shareToWhatsApp({String msg}) async {
     final Map<String, Object> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
-    return await _channel.invokeMethod('shareWhatsApp', arguments);
+    dynamic result;
+    try {
+      result = await _channel.invokeMethod('shareWhatsApp', arguments);
+    } catch (e) {
+      return "false";
+    }
+    return result;
   }
 
   ///use system share ui
   Future<String> shareToSystem({String msg}) async {
     Map<String, Object> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
-    return await _channel.invokeMethod('system', {'msg': msg});
+    dynamic result;
+    try {
+      result = await _channel.invokeMethod('system', {'msg': msg});
+    } catch (e) {
+      return "false";
+    }
+    return result;
   }
 }
