@@ -1,3 +1,7 @@
+## 0.2.1
+
+Fix issue #5
+
 ## 0.2.0
 
 Migrated to AndroidX
