@@ -1,3 +1,6 @@
+## 0.3.0
+Allow developers to enter their own facebook id
+
 ## 0.2.1
 
 Fix issue #5

@@ -21,7 +21,7 @@ dependencies:
   flutter:
     sdk: flutter
   # add flutter_ScreenUtil
-  flutter_share_me: ^0.2.1
+  flutter_share_me: ^0.3.0
 ``` 
 
 ## Usage
@@ -30,6 +30,20 @@ dependencies:
 
 ```
 import 'package:flutter_share_me/flutter_share_me.dart';
+```
+
+#### Add facebook id
+
+Add "facebook app id" to the application tag of AndroidManifest.xml
+```
+    <application>
+       ...
+       //add this 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+            
+    </application>
 ```
 
 ## Methods
