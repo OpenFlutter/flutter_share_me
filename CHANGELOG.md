@@ -1,3 +1,7 @@
+## 0.3.1
+Allow developers to enter their own facebook id
+Delete useless code
+
 ## 0.3.0
 Allow developers to enter their own facebook id
 
