@@ -21,7 +21,7 @@ dependencies:
   flutter:
     sdk: flutter
   # add flutter_ScreenUtil
-  flutter_share_me: ^0.3.1
+  flutter_share_me: ^0.4.0
 ``` 
 
 ## Usage
@@ -48,9 +48,9 @@ Add "facebook app id" to the application tag of AndroidManifest.xml
 
 ## Methods
 
-#### shareToFacebook({String url, String msg})   
-#### shareToTwitter({String url, String msg})   
-#### shareToWhatsApp({String msg})  
+#### shareToFacebook({String msg, String url})   
+#### shareToTwitter({String msg, String url})   
+#### shareToWhatsApp({String base64ImageUrl,String msg})  
 #### shareToSystem({String msg})   use system share ui
 
 These methods will return "success" if they successfully jump to the corresponding app.
@@ -63,46 +63,55 @@ These methods will return "success" if they successfully jump to the correspondi
 
 ## Example
 ```
- Column(
-          children: <Widget>[
-            RaisedButton(
-              child: Text('share to twitter'),
-              onPressed: () async {
-                var response = await FlutterShareMe().shareToTwitter(
-                    url: 'https://github.com/lizhuoyuan',
-                    msg: 'hello flutter! ');
-                if (response == 'success') {
-                  print('navigate success');
-                }
-              },
-            ),
-            RaisedButton(
-              child: Text('share to shareWhatsApp'),
-              onPressed: () {
-                FlutterShareMe().shareToWhatsApp(
-                    msg:
-                        'hello,this is my github:https://github.com/lizhuoyuan');
-              },
-            ),
-            RaisedButton(
-              child: Text('share to shareFacebook'),
-              onPressed: () {
-                FlutterShareMe().shareToFacebook(
-                    url: 'https://github.com/lizhuoyuan', msg: 'Hello Flutter');
-              },
-            ),
-            RaisedButton(
-              child: Text('share to System'),
-              onPressed: () async {
-                var response =
-                    await FlutterShareMe().shareToSystem(msg: 'Hello Flutter');
-                if (response == 'success') {
-                  print('navigate success');
-                }
-              },
-            ),
-          ],
-        ),
+ Container(
+           width: double.infinity,
+           child: Column(
+             crossAxisAlignment: CrossAxisAlignment.center,
+             children: <Widget>[
+               Image.memory(
+                 base64.decode(base64Image.split(',')[1]),
+                 height: 312,
+                 width: 175.3,
+                 fit: BoxFit.fill,
+                 gaplessPlayback: true,
+               ),
+               SizedBox(height: 30),
+               RaisedButton(
+                 child: Text('share to twitter'),
+                 onPressed: () async {
+                   var response = await FlutterShareMe().shareToTwitter(
+                       url: 'https://github.com/lizhuoyuan', msg: msg);
+                   if (response == 'success') {
+                     print('navigate success');
+                   }
+                 },
+               ),
+               RaisedButton(
+                 child: Text('share to shareWhatsApp'),
+                 onPressed: () {
+                   FlutterShareMe()
+                       .shareToWhatsApp(base64ImageUrl: base64Image, msg: msg);
+                 },
+               ),
+               RaisedButton(
+                 child: Text('share to shareFacebook'),
+                 onPressed: () {
+                   FlutterShareMe().shareToFacebook(
+                       url: 'https://github.com/lizhuoyuan', msg: msg);
+                 },
+               ),
+               RaisedButton(
+                 child: Text('share to System'),
+                 onPressed: () async {
+                   var response = await FlutterShareMe().shareToSystem(msg: msg);
+                   if (response == 'success') {
+                     print('navigate success');
+                   }
+                 },
+               ),
+             ],
+           ),
+         )
 ```
 
 

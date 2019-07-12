@@ -4,11 +4,11 @@ package zhuoyuan.li.fluttershareme;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
@@ -22,6 +22,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import zhuoyuan.li.fluttershareme.util.FileUtil;
 
 /**
  * FlutterShareMePlugin
@@ -30,14 +31,15 @@ public class FlutterShareMePlugin implements MethodCallHandler {
 
     private Activity activity;
     private static CallbackManager callbackManager;
+    private Registrar registrar;
+
 
     /**
      * Plugin registration.
      */
-    private FlutterShareMePlugin(MethodChannel channel, Activity activity) {
-        MethodChannel _channel = channel;
-        this.activity = activity;
-        _channel.setMethodCallHandler(this);
+    private FlutterShareMePlugin(Registrar registrar) {
+        this.activity = registrar.activity();
+        this.registrar = registrar;
     }
 
     /**
@@ -45,20 +47,19 @@ public class FlutterShareMePlugin implements MethodCallHandler {
      */
     public static void registerWith(Registrar registrar) {
         final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_share_me");
-        channel.setMethodCallHandler(new FlutterShareMePlugin(channel, registrar.activity()));
+        channel.setMethodCallHandler(new FlutterShareMePlugin(registrar));
         callbackManager = CallbackManager.Factory.create();
     }
 
     /**
      * method
      *
-     * @param call
-     * @param result
+     * @param call   methodCall
+     * @param result Result
      */
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         String url, msg;
-
         switch (call.method) {
             case "shareFacebook":
                 url = call.argument("url");
@@ -72,7 +73,9 @@ public class FlutterShareMePlugin implements MethodCallHandler {
                 break;
             case "shareWhatsApp":
                 msg = call.argument("msg");
-                shareWhatsApp(msg, result);
+                url = call.argument("url");
+
+                shareWhatsApp(url, msg, result);
                 break;
             case "system":
                 msg = call.argument("msg");
@@ -85,7 +88,7 @@ public class FlutterShareMePlugin implements MethodCallHandler {
     }
 
     /**
-     * 调用系统分享
+     * system share
      *
      * @param msg    String
      * @param result Result
@@ -110,7 +113,6 @@ public class FlutterShareMePlugin implements MethodCallHandler {
      * @param result Result
      */
     private void shareToTwitter(String url, String msg, Result result) {
-        //这里分享一个链接，更多分享配置参考官方介绍：https://dev.twitter.com/twitterkit/android/compose-tweets
         try {
             TweetComposer.Builder builder = new TweetComposer.Builder(activity)
                     .text(msg);
@@ -170,17 +172,28 @@ public class FlutterShareMePlugin implements MethodCallHandler {
      * @param msg    String
      * @param result Result
      */
-    private void shareWhatsApp(String msg, Result result) {
+    private void shareWhatsApp(String url, String msg, Result result) {
         try {
-            Intent textIntent;
-            textIntent = new Intent("android.intent.action.SEND");
-            textIntent.setType("text/plain");
-            textIntent.setPackage("com.whatsapp");
-            textIntent.putExtra("android.intent.extra.TEXT", msg);
-            activity.startActivity(textIntent);
+            Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+            whatsappIntent.setType("text/plain");
+            whatsappIntent.setPackage("com.whatsapp");
+            whatsappIntent.putExtra(Intent.EXTRA_TEXT, msg);
+
+            if (!TextUtils.isEmpty(url)) {
+                FileUtil fileHelper = new FileUtil(registrar, url);
+                if (fileHelper.isFile()) {
+                    whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileHelper.getUri());
+                    whatsappIntent.setType(fileHelper.getType());
+                }
+            }
+            whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            activity.startActivity(whatsappIntent);
             result.success("success");
         } catch (Exception var9) {
             result.error("error", var9.toString(), "");
         }
     }
+
+
 }

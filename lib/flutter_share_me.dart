@@ -4,7 +4,7 @@ class FlutterShareMe {
   final MethodChannel _channel = const MethodChannel('flutter_share_me');
 
   ///share to facebook
-  Future<String> shareToFacebook({String url = '', String msg = ''}) async {
+  Future<String> shareToFacebook({String msg = '', String url = ''}) async {
     final Map<String, Object> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
@@ -32,9 +32,11 @@ class FlutterShareMe {
   }
 
   ///share to whatsapp
-  Future<String> shareToWhatsApp({String msg}) async {
+  Future<String> shareToWhatsApp(
+      {String msg = '', String base64ImageUrl = ''}) async {
     final Map<String, Object> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
+    arguments.putIfAbsent('url', () => base64ImageUrl);
     dynamic result;
     try {
       result = await _channel.invokeMethod('shareWhatsApp', arguments);

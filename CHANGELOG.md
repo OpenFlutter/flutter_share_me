@@ -1,3 +1,6 @@
+## 0.4.0
+Support sharing pictures to whatsapp
+
 ## 0.3.1
 Allow developers to enter their own facebook id
 Delete useless code
