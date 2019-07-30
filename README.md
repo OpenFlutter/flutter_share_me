@@ -50,7 +50,7 @@ Add "facebook app id" to the application tag of AndroidManifest.xml
 
 #### shareToFacebook({String msg, String url})   
 #### shareToTwitter({String msg, String url})   
-#### shareToWhatsApp({String base64ImageUrl,String msg})  
+#### shareToWhatsApp({String base64Image,String msg})  
 #### shareToSystem({String msg})   use system share ui
 
 These methods will return "success" if they successfully jump to the corresponding app.
