@@ -50,7 +50,7 @@ Add "facebook app id" to the application tag of AndroidManifest.xml
 
 #### shareToFacebook({String msg, String url})   
 #### shareToTwitter({String msg, String url})   
-#### shareToWhatsApp({String base64Image,String msg})  
+#### shareToWhatsApp({String msg,String base64Image})  
 #### shareToSystem({String msg})   use system share ui
 
 These methods will return "success" if they successfully jump to the corresponding app.
@@ -59,7 +59,7 @@ These methods will return "success" if they successfully jump to the correspondi
 | :------------ | :------------ |
 | String msg  | Text message  |
 | String url  | Url url  |
-
+| String base64Image  | Image base64  |
 
 ## Example
 ```
