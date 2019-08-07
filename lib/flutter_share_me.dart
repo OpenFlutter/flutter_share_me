@@ -33,10 +33,10 @@ class FlutterShareMe {
 
   ///share to whatsapp
   Future<String> shareToWhatsApp(
-      {String msg = '', String base64ImageUrl = ''}) async {
+      {String msg = '', String base64Image = ''}) async {
     final Map<String, Object> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
-    arguments.putIfAbsent('url', () => base64ImageUrl);
+    arguments.putIfAbsent('url', () => base64Image);
     dynamic result;
     try {
       result = await _channel.invokeMethod('shareWhatsApp', arguments);

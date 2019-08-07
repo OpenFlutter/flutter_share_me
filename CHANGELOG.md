@@ -1,3 +1,6 @@
+## 0.5.0
+change Key "base64ImageUrl" to "base64Image".
+
 ## 0.4.0
 Support sharing pictures to whatsapp
 
