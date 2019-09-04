@@ -20,7 +20,7 @@ Please check the latest version before installation.
 dependencies:
   flutter:
     sdk: flutter
-  # add flutter_ScreenUtil
+  # add flutter_share_me
   flutter_share_me: ^0.4.0
 ``` 
 
