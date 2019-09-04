@@ -6,9 +6,9 @@
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider343254889799245"
-            android:exported="true" />
+            android:exported="false" />
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name=".util.ShareFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
