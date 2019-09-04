@@ -1,3 +1,6 @@
+## 0.6.0
+Solve the provider conflict problem
+
 ## 0.5.0
 change Key "base64ImageUrl" to "base64Image".
 
