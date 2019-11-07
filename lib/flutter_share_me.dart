@@ -31,7 +31,7 @@ class FlutterShareMe {
     return result;
   }
 
-  ///share to whatsapp
+  ///share to WhatsApp
   Future<String> shareToWhatsApp(
       {String msg = '', String base64Image = ''}) async {
     final Map<String, Object> arguments = Map<String, dynamic>();
@@ -43,6 +43,23 @@ class FlutterShareMe {
     } catch (e) {
       return "false";
     }
+
+    return result;
+  }
+
+  ///share to WhatsApp4Biz
+  Future<String> shareToWhatsApp4Biz(
+      {String msg = '', String base64Image = ''}) async {
+    final Map<String, Object> arguments = Map<String, dynamic>();
+    arguments.putIfAbsent('msg', () => msg);
+    arguments.putIfAbsent('url', () => base64Image);
+    dynamic result;
+    try {
+      result = await _channel.invokeMethod('shareWhatsApp4Biz', arguments);
+    } catch (e) {
+      return "false";
+    }
+
     return result;
   }
 

@@ -51,6 +51,7 @@ Add "facebook app id" to the application tag of AndroidManifest.xml
 #### shareToFacebook({String msg, String url})   
 #### shareToTwitter({String msg, String url})   
 #### shareToWhatsApp({String msg,String base64Image})  
+#### shareToWhatsApp4Biz({String msg,String base64Image})  
 #### shareToSystem({String msg})   use system share ui
 
 These methods will return "success" if they successfully jump to the corresponding app.
@@ -87,10 +88,17 @@ These methods will return "success" if they successfully jump to the correspondi
                  },
                ),
                RaisedButton(
-                 child: Text('share to shareWhatsApp'),
+                 child: Text('share to WhatsApp'),
                  onPressed: () {
                    FlutterShareMe()
-                       .shareToWhatsApp(base64ImageUrl: base64Image, msg: msg);
+                       .shareToWhatsApp(base64Image: base64Image, msg: msg);
+                 },
+               ),
+               RaisedButton(
+                 child: Text('share to WhatsApp Business'),
+                 onPressed: () {
+                   FlutterShareMe()
+                       .shareToWhatsApp4Biz(base64Image: base64Image, msg: msg);
                  },
                ),
                RaisedButton(

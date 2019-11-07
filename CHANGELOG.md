@@ -1,3 +1,6 @@
+## 0.7.0
+Support whatsapp Business
+
 ## 0.6.0
 Solve the provider conflict problem
 

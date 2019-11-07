@@ -33,7 +33,6 @@ public class FlutterShareMePlugin implements MethodCallHandler {
     private static CallbackManager callbackManager;
     private Registrar registrar;
 
-
     /**
      * Plugin registration.
      */
@@ -74,8 +73,12 @@ public class FlutterShareMePlugin implements MethodCallHandler {
             case "shareWhatsApp":
                 msg = call.argument("msg");
                 url = call.argument("url");
-
-                shareWhatsApp(url, msg, result);
+                shareWhatsApp(url, msg, result, false);
+                break;
+            case "shareWhatsApp4Biz":
+                msg = call.argument("msg");
+                url = call.argument("url");
+                shareWhatsApp(url, msg, result, true);
                 break;
             case "system":
                 msg = call.argument("msg");
@@ -169,14 +172,15 @@ public class FlutterShareMePlugin implements MethodCallHandler {
     /**
      * share to whatsapp
      *
-     * @param msg    String
-     * @param result Result
+     * @param msg                String
+     * @param result             Result
+     * @param shareToWhatsAppBiz boolean
      */
-    private void shareWhatsApp(String url, String msg, Result result) {
+    private void shareWhatsApp(String url, String msg, Result result, boolean shareToWhatsAppBiz) {
         try {
             Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
             whatsappIntent.setType("text/plain");
-            whatsappIntent.setPackage("com.whatsapp");
+            whatsappIntent.setPackage(shareToWhatsAppBiz ? "com.whatsapp.w4b" : "com.whatsapp");
             whatsappIntent.putExtra(Intent.EXTRA_TEXT, msg);
 
             if (!TextUtils.isEmpty(url)) {
@@ -194,6 +198,4 @@ public class FlutterShareMePlugin implements MethodCallHandler {
             result.error("error", var9.toString(), "");
         }
     }
-
-
 }

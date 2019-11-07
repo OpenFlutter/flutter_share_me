@@ -46,10 +46,17 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               RaisedButton(
-                child: Text('share to shareWhatsApp'),
+                child: Text('share to WhatsApp'),
                 onPressed: () {
                   FlutterShareMe()
                       .shareToWhatsApp(base64Image: base64Image, msg: msg);
+                },
+              ),
+              RaisedButton(
+                child: Text('share to WhatsApp Business'),
+                onPressed: () {
+                  FlutterShareMe()
+                      .shareToWhatsApp4Biz(base64Image: base64Image, msg: msg);
                 },
               ),
               RaisedButton(
