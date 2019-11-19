@@ -4,10 +4,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application>
         <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider343254889799245"
-            android:exported="false" />
-        <provider
             android:name=".util.ShareFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"

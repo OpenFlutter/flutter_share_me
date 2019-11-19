@@ -1,3 +1,6 @@
+## 0.8.0
+Optimize usage , please read the readme.md
+
 ## 0.7.0
 Support whatsapp Business
 
