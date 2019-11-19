@@ -43,7 +43,20 @@ Add "facebook app id" to the application tag of AndroidManifest.xml
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
             
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider[facebook_app_id]"
+            android:exported="false" />
     </application>
+```
+
+string.xml:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- Replace "343254889799245" with your Facebook App ID here. -->
+    <string name="facebook_app_id">343254889799245</string>
+</resources>
 ```
 
 ## Methods
