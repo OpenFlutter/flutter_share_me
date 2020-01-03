@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -17,6 +19,10 @@ import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -27,26 +33,36 @@ import zhuoyuan.li.fluttershareme.util.FileUtil;
 /**
  * FlutterShareMePlugin
  */
-public class FlutterShareMePlugin implements MethodCallHandler {
+public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private Activity activity;
     private static CallbackManager callbackManager;
-    private Registrar registrar;
-
-    /**
-     * Plugin registration.
-     */
-    private FlutterShareMePlugin(Registrar registrar) {
-        this.activity = registrar.activity();
-        this.registrar = registrar;
-    }
+    private MethodChannel methodChannel;
 
     /**
      * Plugin registration.
      */
     public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_share_me");
-        channel.setMethodCallHandler(new FlutterShareMePlugin(registrar));
+        final FlutterShareMePlugin instance = new FlutterShareMePlugin();
+        instance.onAttachedToEngine(registrar.messenger());
+        instance.activity = registrar.activity();
+    }
+
+    @Override
+    public void onAttachedToEngine(FlutterPluginBinding binding) {
+        onAttachedToEngine(binding.getBinaryMessenger());
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        methodChannel.setMethodCallHandler(null);
+        methodChannel = null;
+        activity = null;
+    }
+
+    private void onAttachedToEngine(BinaryMessenger messenger) {
+        methodChannel = new MethodChannel(messenger, "flutter_share_me");
+        methodChannel.setMethodCallHandler(this);
         callbackManager = CallbackManager.Factory.create();
     }
 
@@ -57,7 +73,7 @@ public class FlutterShareMePlugin implements MethodCallHandler {
      * @param result Result
      */
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
+    public void onMethodCall(MethodCall call, @NonNull Result result) {
         String url, msg;
         switch (call.method) {
             case "shareFacebook":
@@ -184,7 +200,7 @@ public class FlutterShareMePlugin implements MethodCallHandler {
             whatsappIntent.putExtra(Intent.EXTRA_TEXT, msg);
 
             if (!TextUtils.isEmpty(url)) {
-                FileUtil fileHelper = new FileUtil(registrar, url);
+                FileUtil fileHelper = new FileUtil(activity, url);
                 if (fileHelper.isFile()) {
                     whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileHelper.getUri());
@@ -197,5 +213,25 @@ public class FlutterShareMePlugin implements MethodCallHandler {
         } catch (Exception var9) {
             result.error("error", var9.toString(), "");
         }
+    }
+
+    @Override
+    public void onAttachedToActivity(ActivityPluginBinding binding) {
+        activity = binding.getActivity();
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
+        activity = binding.getActivity();
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+
     }
 }

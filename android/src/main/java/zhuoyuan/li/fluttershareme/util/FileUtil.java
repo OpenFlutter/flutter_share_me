@@ -1,7 +1,6 @@
 package zhuoyuan.li.fluttershareme.util;
 
-import io.flutter.plugin.common.PluginRegistry.Registrar;
-
+import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,16 +17,16 @@ import java.io.IOException;
 public class FileUtil {
 
     private final String authorities;
-    private final Registrar registrar;
+    private final Context context;
     private String url;
     private String type;
     private Uri uri;
 
-    public FileUtil(Registrar registrar, String url) {
+    public FileUtil(Context applicationContext, String url) {
         this.url = url;
         this.uri = Uri.parse(this.url);
-        this.registrar = registrar;
-        authorities = registrar.context().getPackageName() + ".provider";
+        this.context = applicationContext;
+        authorities = applicationContext.getPackageName() + ".provider";
     }
 
     private String getMimeType(String url) {
@@ -85,7 +84,7 @@ public class FileUtil {
 
     private String getRealPath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
-        CursorLoader loader = new CursorLoader(registrar.context(), uri, projection, null, null, null);
+        CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
         Cursor cursor = loader.loadInBackground();
         String result = null;
         if (cursor != null && cursor.moveToFirst()) {
@@ -101,7 +100,7 @@ public class FileUtil {
         String extension = mime.getExtensionFromMimeType(getType());
 
         if (isBase64File()) {
-            final String tempPath = registrar.context().getCacheDir().getPath();
+            final String tempPath = context.getCacheDir().getPath();
             final String prefix = "" + System.currentTimeMillis() / 1000;
             String encodedFile = uri.getSchemeSpecificPart()
                     .substring(uri.getSchemeSpecificPart().indexOf(";base64,") + 8);
@@ -111,13 +110,13 @@ public class FileUtil {
                 stream.write(Base64.decode(encodedFile, Base64.DEFAULT));
                 stream.flush();
                 stream.close();
-                return FileProvider.getUriForFile(registrar.context(), authorities, tempFile);
+                return FileProvider.getUriForFile(context, authorities, tempFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (isLocalFile()) {
             Uri uri = Uri.parse(this.url);
-            return FileProvider.getUriForFile(registrar.context(), authorities, new File(uri.getPath()));
+            return FileProvider.getUriForFile(context, authorities, new File(uri.getPath()));
         }
         return null;
     }

@@ -1,3 +1,8 @@
+## 0.9.0
+Supporting the new Android plugins APIs
+As of the 1.12 release, new plugin APIs are available for the Android platform
+If there is a problem with this version, use 0.8.0
+
 ## 0.8.0
 Optimize usage , please read the readme.md
 
