@@ -1,7 +1,9 @@
 package zhuoyuan.li.fluttershareme.util;
 
 import android.content.Context;
-import android.content.CursorLoader;
+
+import androidx.loader.content.CursorLoader;
+
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
