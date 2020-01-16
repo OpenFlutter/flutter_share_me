@@ -1,3 +1,8 @@
+
+## 0.9.1
+delete x-lint warning
+update facebook sdk
+
 ## 0.9.0
 Supporting the new Android plugins APIs
 As of the 1.12 release, new plugin APIs are available for the Android platform
