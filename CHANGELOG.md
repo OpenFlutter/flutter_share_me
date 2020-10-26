@@ -1,4 +1,8 @@
 
+
+## 0.9.2
+update facebook sdk version to 5.15.5
+
 ## 0.9.1
 delete x-lint warning
 update facebook sdk
