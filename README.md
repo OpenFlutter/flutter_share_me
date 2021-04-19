@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
   # add flutter_share_me
-  flutter_share_me: ^0.9.1
+  flutter_share_me: ^0.9.2
 ``` 
 
 ## Usage
