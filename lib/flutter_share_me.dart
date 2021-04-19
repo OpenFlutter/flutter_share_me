@@ -4,8 +4,8 @@ class FlutterShareMe {
   final MethodChannel _channel = const MethodChannel('flutter_share_me');
 
   ///share to facebook
-  Future<String> shareToFacebook({String msg = '', String url = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>();
+  Future<String?> shareToFacebook({String msg = '', String url = ''}) async {
+    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
     dynamic result;
@@ -18,8 +18,8 @@ class FlutterShareMe {
   }
 
   ///share to twitter
-  Future<String> shareToTwitter({String msg = '', String url = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>();
+  Future<String?> shareToTwitter({String msg = '', String url = ''}) async {
+    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
     dynamic result;
@@ -32,9 +32,9 @@ class FlutterShareMe {
   }
 
   ///share to WhatsApp
-  Future<String> shareToWhatsApp(
+  Future<String?> shareToWhatsApp(
       {String msg = '', String base64Image = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>();
+    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => base64Image);
     dynamic result;
@@ -48,9 +48,9 @@ class FlutterShareMe {
   }
 
   ///share to WhatsApp4Biz
-  Future<String> shareToWhatsApp4Biz(
+  Future<String?> shareToWhatsApp4Biz(
       {String msg = '', String base64Image = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>();
+    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => base64Image);
     dynamic result;
@@ -64,8 +64,8 @@ class FlutterShareMe {
   }
 
   ///use system share ui
-  Future<String> shareToSystem({String msg}) async {
-    Map<String, Object> arguments = Map<String, dynamic>();
+  Future<String?> shareToSystem({String? msg}) async {
+    Map<String, Object?> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     dynamic result;
     try {
