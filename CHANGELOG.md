@@ -1,3 +1,6 @@
+# 0.10.1
+- fix #36 #38
+
 # 0.10.0
 - migrate null-safety
 
