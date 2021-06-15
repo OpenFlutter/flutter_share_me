@@ -5,7 +5,7 @@ class FlutterShareMe {
 
   ///share to facebook
   Future<String?> shareToFacebook({String msg = '', String url = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
+    final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
     dynamic result;
@@ -19,7 +19,7 @@ class FlutterShareMe {
 
   ///share to twitter
   Future<String?> shareToTwitter({String msg = '', String url = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
+    final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => url);
     dynamic result;
@@ -32,9 +32,8 @@ class FlutterShareMe {
   }
 
   ///share to WhatsApp
-  Future<String?> shareToWhatsApp(
-      {String msg = '', String base64Image = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
+  Future<String?> shareToWhatsApp({String msg = '', String base64Image = ''}) async {
+    final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => base64Image);
     dynamic result;
@@ -48,9 +47,8 @@ class FlutterShareMe {
   }
 
   ///share to WhatsApp4Biz
-  Future<String?> shareToWhatsApp4Biz(
-      {String msg = '', String base64Image = ''}) async {
-    final Map<String, Object> arguments = Map<String, dynamic>() as Map<String, Object>;
+  Future<String?> shareToWhatsApp4Biz({String msg = '', String base64Image = ''}) async {
+    final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => base64Image);
     dynamic result;
@@ -65,7 +63,7 @@ class FlutterShareMe {
 
   ///use system share ui
   Future<String?> shareToSystem({String? msg}) async {
-    Map<String, Object?> arguments = Map<String, dynamic>();
+    Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     dynamic result;
     try {
