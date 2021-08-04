@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
@@ -26,13 +25,13 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.memory(
-                base64.decode(base64Image.split(',')[1]),
-                height: 312,
-                width: 175.3,
-                fit: BoxFit.fill,
-                gaplessPlayback: true,
-              ),
+              // Image.memory(
+              //   base64.decode(base64Image.split(',')[1]),
+              //   height: 312,
+              //   width: 175.3,
+              //   fit: BoxFit.fill,
+              //   gaplessPlayback: true,
+              // ),
               SizedBox(height: 30),
               RaisedButton(
                 child: Text('share to twitter'),
@@ -68,7 +67,7 @@ class _MyAppState extends State<MyApp> {
               RaisedButton(
                 child: Text('share to System'),
                 onPressed: () async {
-                  var response = await FlutterShareMe().shareToSystem(msg: msg);
+                  var response = await FlutterShareMe().shareToSystem(msg: 'Here is the share value');
                   if (response == 'success') {
                     print('navigate success');
                   }

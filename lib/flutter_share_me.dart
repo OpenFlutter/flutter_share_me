@@ -62,7 +62,7 @@ class FlutterShareMe {
   }
 
   ///use system share ui
-  Future<String?> shareToSystem({String? msg}) async {
+  Future<String?> shareToSystem({required String msg}) async {
     Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     dynamic result;
