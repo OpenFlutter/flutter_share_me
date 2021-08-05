@@ -20,10 +20,10 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
         else if(call.method.elementsEqual("shareFacebook")){
             let args = call.arguments as? Dictionary<String,Any>
-            sharefacebook(message: args!["msg"] as! String, result: result)
+            sharefacebook(message: args, result: result)
         }else if(call.method.elementsEqual("shareTwitter")){
             let args = call.arguments as? Dictionary<String,Any>
-            shareTwitter    (message: args!["msg"] as! String, result: result)
+            shareTwitter   (message: args!["msg"] as! String, result: result)
         }
         else{
             let args = call.arguments as? Dictionary<String,Any>
@@ -75,13 +75,13 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
     }
     
-    func sharefacebook(message:String, result: @escaping FlutterResult)  {
+    func sharefacebook(message:Dictionary<String,Any>, result: @escaping FlutterResult)  {
         let viewController = UIApplication.shared.delegate?.window??.rootViewController
         let shareContent = ShareLinkContent()
-            shareContent.contentURL = URL.init(string: "https://developers.facebook.com")! //your link
-            shareContent.quote = "Text to be shared"
-            ShareDialog(fromViewController: viewController, content: shareContent, delegate: self).show()
-
+        shareContent.contentURL = URL.init(string: message["url"])!
+        shareContent.quote = message["msg"]
+        ShareDialog(fromViewController: viewController, content: shareContent, delegate: self).show()
+        
     }
     
     func shareTwitter(message:String, result: @escaping FlutterResult)  {
@@ -108,13 +108,13 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     
     public func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
         if sharer.shareContent.pageID != nil {
-                print("Share: Success")
-            }
+            print("Share: Success")
+        }
     }
     
     public func sharer(_ sharer: Sharing, didFailWithError error: Error) {
         print("Share: Fail")
-
+        
     }
     
     public func sharerDidCancel(_ sharer: Sharing) {
