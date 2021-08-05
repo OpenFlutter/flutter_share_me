@@ -2,8 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>FacebookDisplayName</key>
+	<string>Flutter share me</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb343254889799245</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>343254889799245</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>fbauth2</string>
 		<string>whatsapp</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>

@@ -52,9 +52,10 @@ class _MyAppState extends State<MyApp> {
               ),
               RaisedButton(
                 child: Text('share to WhatsApp Business'),
-                onPressed: () {
-                  FlutterShareMe()
+                onPressed: () async {
+                 String response = await FlutterShareMe()
                       .shareToWhatsApp4Biz(base64Image: base64Image, msg: msg);
+                 print(response);
                 },
               ),
               RaisedButton(
