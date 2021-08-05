@@ -10,6 +10,7 @@ Support Url and Text.
 support:
  - Android :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,System Share
  - iOS: WhatsApp(WhatsAppBusiness),System Share
+
 **I hope someone can submit iOS support.**
 
 **Note: This plugin is still under development, and some APIs might not be available yet.  
