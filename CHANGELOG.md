@@ -1,6 +1,10 @@
+# 0.11.1
+- readme
+
 # 0.11.0
 - merge #42
 - support ios whatsapp and system share
+
 # 0.10.1
 - fix #36 #38
 
