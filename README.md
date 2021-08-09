@@ -24,7 +24,7 @@ dependencies:
   # add flutter_share_me
   flutter_share_me: ^0.11.0
 ```
-##Setup 
+## Setup 
 
 #### Android
 
@@ -79,7 +79,9 @@ Note-: Make sure you add fb in  at start of your fb Id in CFBundleURLSchemes.
 
 Add below value in url scheme.
 
-````<key>LSApplicationQueriesSchemes</key>
+
+
+```<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbauth2</string>
 		<string>fbapi</string>
@@ -97,10 +99,10 @@ Add below value in url scheme.
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
-	</array>````
+	</array>
+```
 
-
-#### Setup Whatsapp
+### Setup Whatsapp
 
 Make sure you add whatsapp in plist.
 
