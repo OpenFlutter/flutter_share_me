@@ -153,12 +153,18 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         // cast to an url
         let urlschme = URL(string: escapedShareString)
         // open in safari
-        if UIApplication.shared.canOpenURL(urlschme! as URL){
-            UIApplication.shared.openURL(urlschme!)
-            result("Sucess")
-        }else{
+       do {
+            if UIApplication.shared.canOpenURL(urlschme! as URL){
+                UIApplication.shared.openURL(urlschme!)
+                result("Sucess")
+            }else{
+                result(FlutterError(code: "Not found", message: "Twitter is not found", details: "Twitter not intalled or Check url scheme."));
+                
+            }
+        } catch  {
             result(FlutterError(code: "Not found", message: "Twitter is not found", details: "Twitter not intalled or Check url scheme."));
         }
+        
         
         
     }
