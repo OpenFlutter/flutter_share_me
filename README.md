@@ -22,18 +22,11 @@ dependencies:
   flutter:
     sdk: flutter
   # add flutter_share_me
-  flutter_share_me: ^0.9.2
-``` 
-
-## Usage
-
-#### Add the following imports to your Dart code:
-
+  flutter_share_me: ^0.11.0
 ```
-import 'package:flutter_share_me/flutter_share_me.dart';
-```
+##Setup 
 
-#### Add facebook id
+#### Android
 
 Add "facebook app id" to the application tag of AndroidManifest.xml
 ```
@@ -59,6 +52,80 @@ string.xml:
     <string name="facebook_app_id">343254889799245</string>
 </resources>
 ```
+
+
+#### IOS
+    
+##### setup facebook
+
+make sure you add below deatils in your plist file.
+
+
+```
+<key>FacebookAppID</key>
+<string>fbid</string>
+<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb-your-fb-id</string>
+			</array>
+		</dict>
+	</array>
+
+```
+Note-: Make sure you add fb in  at start of your fb Id in CFBundleURLSchemes.
+
+Add below value in url scheme.
+
+````<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbauth2</string>
+		<string>fbapi</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>````
+
+
+#### Setup Whatsapp
+
+Make sure you add whatsapp in plist.
+
+````<key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>whatsapp</string>
+        </array>
+````
+
+#### Setup Twiter
+
+````<key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>twitter</string>
+        </array>
+````
+
+## Usage
+
+#### Add the following imports to your Dart code:
+
+```
+import 'package:flutter_share_me/flutter_share_me.dart';
+```
+
 
 ## Methods
 
