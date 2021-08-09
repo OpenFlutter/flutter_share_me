@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,8 +10,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String msg = 'hello,this is my github:https://github.com/lizhuoyuan';
-  String base64Image ='';
+  String msg = 'Flutter share is great!!';
+  FlutterShareMe shareMe = FlutterShareMe();
+  String base;
+  XFile image;
+  ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +34,14 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              // Image.memory(
-              //   base64.decode(base64Image.split(',')[1]),
-              //   height: 312,
-              //   width: 175.3,
-              //   fit: BoxFit.fill,
-              //   gaplessPlayback: true,
-              // ),
+              SizedBox(height: 30),
+              RaisedButton(
+                child: Text('Pick image'),
+                onPressed: () async {
+                  image = await _picker.pickImage(source: ImageSource.gallery);
+                  setState(() {});
+                },
+              ),
               SizedBox(height: 30),
               RaisedButton(
                 child: Text('share to twitter'),
@@ -46,29 +56,35 @@ class _MyAppState extends State<MyApp> {
               RaisedButton(
                 child: Text('share to WhatsApp'),
                 onPressed: () {
-                  FlutterShareMe()
-                      .shareToWhatsApp(base64Image: base64Image, msg: msg);
+
+                  FlutterShareMe().shareToWhatsApp(msg: msg);
+
+
                 },
               ),
               RaisedButton(
                 child: Text('share to WhatsApp Business'),
                 onPressed: () async {
-                 String response = await FlutterShareMe()
-                      .shareToWhatsApp4Biz(base64Image: base64Image, msg: msg);
-                 print(response);
+                  String response;
+
+                    response =await FlutterShareMe().shareToWhatsApp(msg: msg);
+
+                  print(response);
                 },
               ),
               RaisedButton(
                 child: Text('share to shareFacebook'),
                 onPressed: () {
                   FlutterShareMe().shareToFacebook(
-                      url: 'https://github.com/lizhuoyuan', msg: msg);
+                      url: 'https://pub.dev/packages/flutter_share_me',
+                      msg: msg);
                 },
               ),
               RaisedButton(
                 child: Text('share to System'),
                 onPressed: () async {
-                  var response = await FlutterShareMe().shareToSystem(msg: 'Here is the share value');
+                  var response = await FlutterShareMe()
+                      .shareToSystem(msg: 'Here is the share value');
                   if (response == 'success') {
                     print('navigate success');
                   }
