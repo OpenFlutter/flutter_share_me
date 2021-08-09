@@ -178,3 +178,6 @@ These methods will return "success" if they successfully jump to the correspondi
 ```
 
 
+### Checkout the full example [here](https://github.com/OpenFlutter/flutter_share_me/blob/master/example/lib/main.dart) 
+
+
