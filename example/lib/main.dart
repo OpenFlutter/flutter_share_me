@@ -11,11 +11,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+
+  String msg = 'hello,this is my github:https://github.com/lizhuoyuan';
+  String base64Image = '';
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,6 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.facebook),
                 child: Text('share to  FaceBook'),
-              ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
                 child: Text('share to System'),

@@ -1,1 +1,2 @@
 {"info":"This is a generated file; do not edit or check into version control.","plugins":{"ios":[{"name":"flutter_share_me","path":"/Users/jigafumakiya/Documents/Jigar/plugin/flutter_share_me/","dependencies":[]}],"android":[{"name":"flutter_share_me","path":"/Users/jigafumakiya/Documents/Jigar/plugin/flutter_share_me/","dependencies":[]}],"macos":[],"linux":[],"windows":[],"web":[]},"dependencyGraph":[{"name":"flutter_share_me","dependencies":[]}],"date_created":"2021-08-09 23:04:56.041201","version":"2.2.3"}
+
