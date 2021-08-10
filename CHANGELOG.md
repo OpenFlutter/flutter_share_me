@@ -1,3 +1,6 @@
+# 0.11.2
+- add ios support
+
 # 0.11.1
 - readme
 
