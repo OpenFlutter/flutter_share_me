@@ -32,10 +32,11 @@ class FlutterShareMe {
   }
 
   ///share to WhatsApp
-  Future<String?> shareToWhatsApp({String msg = '', String base64Image = ''}) async {
+  /// @parm imageUrl is local image
+  Future<String?> shareToWhatsApp({String msg = '', String imageUrl = ''}) async {
     final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
-    arguments.putIfAbsent('url', () => base64Image);
+    arguments.putIfAbsent('url', () => imageUrl);
     dynamic result;
     try {
       result = await _channel.invokeMethod('shareWhatsApp', arguments);
@@ -47,10 +48,11 @@ class FlutterShareMe {
   }
 
   ///share to WhatsApp4Biz
-  Future<String?> shareToWhatsApp4Biz({String msg = '', String base64Image = ''}) async {
+  /// @parm imageUrl is local image
+  Future<String?> shareToWhatsApp4Biz({String msg = '', String imageUrl = ''}) async {
     final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
-    arguments.putIfAbsent('url', () => base64Image);
+    arguments.putIfAbsent('url', () => imageUrl);
     dynamic result;
     try {
       result = await _channel.invokeMethod('shareWhatsApp4Biz', arguments);

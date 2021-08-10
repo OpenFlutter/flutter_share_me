@@ -13,6 +13,7 @@ support:
 
 **I hope someone can submit iOS support.**
 
+
 **Note: This plugin is still under development, and some APIs might not be available yet.  
 Feedback and Pull Requests are most welcome!**
 
@@ -26,18 +27,11 @@ dependencies:
   flutter:
     sdk: flutter
   # add flutter_share_me
-  flutter_share_me: ^0.9.2
-``` 
-
-## Usage
-
-#### Add the following imports to your Dart code:
-
+  flutter_share_me: ^0.11.0
 ```
-import 'package:flutter_share_me/flutter_share_me.dart';
-```
+## Setup 
 
-#### Add facebook id
+#### Android
 
 Add "facebook app id" to the application tag of AndroidManifest.xml
 ```
@@ -64,6 +58,82 @@ string.xml:
 </resources>
 ```
 
+
+#### IOS
+    
+##### setup facebook
+
+make sure you add below deatils in your plist file.
+
+
+```
+<key>FacebookAppID</key>
+<string>fbid</string>
+<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb-your-fb-id</string>
+			</array>
+		</dict>
+	</array>
+
+```
+Note-: Make sure you add fb in  at start of your fb Id in CFBundleURLSchemes.
+
+Add below value in url scheme.
+
+
+
+```<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbauth2</string>
+		<string>fbapi</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
+```
+
+### Setup Whatsapp
+
+Make sure you add whatsapp in plist.
+
+````<key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>whatsapp</string>
+        </array>
+````
+
+#### Setup Twiter
+
+````<key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>twitter</string>
+        </array>
+````
+
+## Usage
+
+#### Add the following imports to your Dart code:
+
+```
+import 'package:flutter_share_me/flutter_share_me.dart';
+```
+
+
 ## Methods
 
 #### shareToFacebook({String msg, String url})   
@@ -83,61 +153,36 @@ These methods will return "success" if they successfully jump to the correspondi
 ## Example
 ```
  Container(
-           width: double.infinity,
-           child: Column(
-             crossAxisAlignment: CrossAxisAlignment.center,
-             children: <Widget>[
-               Image.memory(
-                 base64.decode(base64Image.split(',')[1]),
-                 height: 312,
-                 width: 175.3,
-                 fit: BoxFit.fill,
-                 gaplessPlayback: true,
-               ),
-               SizedBox(height: 30),
-               RaisedButton(
-                 child: Text('share to twitter'),
-                 onPressed: () async {
-                   var response = await FlutterShareMe().shareToTwitter(
-                       url: 'https://github.com/lizhuoyuan', msg: msg);
-                   if (response == 'success') {
-                     print('navigate success');
-                   }
-                 },
-               ),
-               RaisedButton(
-                 child: Text('share to WhatsApp'),
-                 onPressed: () {
-                   FlutterShareMe()
-                       .shareToWhatsApp(base64Image: base64Image, msg: msg);
-                 },
-               ),
-               RaisedButton(
-                 child: Text('share to WhatsApp Business'),
-                 onPressed: () {
-                   FlutterShareMe()
-                       .shareToWhatsApp4Biz(base64Image: base64Image, msg: msg);
-                 },
-               ),
-               RaisedButton(
-                 child: Text('share to shareFacebook'),
-                 onPressed: () {
-                   FlutterShareMe().shareToFacebook(
-                       url: 'https://github.com/lizhuoyuan', msg: msg);
-                 },
-               ),
-               RaisedButton(
-                 child: Text('share to System'),
-                 onPressed: () async {
-                   var response = await FlutterShareMe().shareToSystem(msg: msg);
-                   if (response == 'success') {
-                     print('navigate success');
-                   }
-                 },
-               ),
-             ],
-           ),
-         )
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 30),
+              ElevatedButton(
+                  onPressed: () => onButtonTap(Share.twitter),
+                  child: Text('share to twitter')),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.whatsapp),
+                child: Text('share to WhatsApp'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.whatsapp_business),
+                child: Text('share to WhatsApp  Business'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.facebook),
+                child: Text('share to  FaceBook'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_system),
+                child: Text('share to System'),
+              ),
+            ],
+          ),
+        )
 ```
+
+
+### Checkout the full example [here](https://github.com/OpenFlutter/flutter_share_me/blob/master/example/lib/main.dart) 
 
 

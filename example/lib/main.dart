@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 
+enum Share { facebook, twitter, whatsapp, whatsapp_business, share_system }
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -9,6 +11,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   String msg = 'hello,this is my github:https://github.com/lizhuoyuan';
   String base64Image = '';
 
@@ -24,56 +27,59 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              // Image.memory(
-              //   base64.decode(base64Image.split(',')[1]),
-              //   height: 312,
-              //   width: 175.3,
-              //   fit: BoxFit.fill,
-              //   gaplessPlayback: true,
-              // ),
               SizedBox(height: 30),
-              RaisedButton(
-                child: Text('share to twitter'),
-                onPressed: () async {
-                  var response = await FlutterShareMe()
-                      .shareToTwitter(url: 'https://github.com/lizhuoyuan', msg: msg);
-                  if (response == 'success') {
-                    print('navigate success');
-                  }
-                },
-              ),
-              RaisedButton(
+              ElevatedButton(
+                  onPressed: () => onButtonTap(Share.twitter),
+                  child: Text('share to twitter')),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.whatsapp),
                 child: Text('share to WhatsApp'),
-                onPressed: () {
-                  FlutterShareMe().shareToWhatsApp(base64Image: base64Image, msg: msg);
-                },
               ),
-              RaisedButton(
-                child: Text('share to WhatsApp Business'),
-                onPressed: () {
-                  FlutterShareMe().shareToWhatsApp4Biz(base64Image: base64Image, msg: msg);
-                },
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.whatsapp_business),
+                child: Text('share to WhatsApp  Business'),
               ),
-              RaisedButton(
-                child: Text('share to shareFacebook'),
-                onPressed: () {
-                  FlutterShareMe().shareToFacebook(url: 'https://github.com/lizhuoyuan', msg: msg);
-                },
-              ),
-              RaisedButton(
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.facebook),
+                child: Text('share to  FaceBook'),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_system),
                 child: Text('share to System'),
-                onPressed: () async {
-                  var response =
-                      await FlutterShareMe().shareToSystem(msg: 'Here is the share value');
-                  if (response == 'success') {
-                    print('navigate success');
-                  }
-                },
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> onButtonTap(Share share) async {
+    String msg =
+        'Flutter share is great!!\n Check out full example at https://pub.dev/packages/flutter_share_me';
+    String url = 'https://pub.dev/packages/flutter_share_me';
+
+    String? response;
+    FlutterShareMe flutterShareMe = FlutterShareMe();
+    switch (share) {
+      case Share.facebook:
+        response = await flutterShareMe.shareToFacebook(url: url, msg: msg);
+        break;
+      case Share.twitter:
+        response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
+        break;
+      case Share.whatsapp:
+        response = await flutterShareMe.shareToWhatsApp(msg: msg);
+        break;
+      case Share.whatsapp_business:
+        response = await flutterShareMe.shareToWhatsApp(msg: msg);
+
+        break;
+      case Share.share_system:
+        response = await flutterShareMe.shareToSystem(msg: msg);
+
+        break;
+    }
+
+    print(response);
   }
 }
