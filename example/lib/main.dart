@@ -11,7 +11,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   String msg = 'hello,this is my github:https://github.com/lizhuoyuan';
   String base64Image = '';
 
@@ -29,8 +28,7 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               SizedBox(height: 30),
               ElevatedButton(
-                  onPressed: () => onButtonTap(Share.twitter),
-                  child: Text('share to twitter')),
+                  onPressed: () => onButtonTap(Share.twitter), child: Text('share to twitter')),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp),
                 child: Text('share to WhatsApp'),
@@ -42,6 +40,7 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.facebook),
                 child: Text('share to  FaceBook'),
+              ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
                 child: Text('share to System'),
