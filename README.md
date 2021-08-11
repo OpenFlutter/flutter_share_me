@@ -8,11 +8,7 @@ You can use it share to Facebook , WhatsApp(WhatsAppBusiness) , Twitter And Syst
 Support Url and Text.
 
 support:
- - Android :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,System Share
- - iOS: WhatsApp(WhatsAppBusiness),System Share
-
-**I hope someone can submit iOS support.**
-
+ - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,System Share
 
 **Note: This plugin is still under development, and some APIs might not be available yet.  
 Feedback and Pull Requests are most welcome!**
