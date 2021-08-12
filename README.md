@@ -134,8 +134,8 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 
 #### shareToFacebook({String msg, String url})   
 #### shareToTwitter({String msg, String url})   
-#### shareToWhatsApp({String msg,String base64Image})  
-#### shareToWhatsApp4Biz({String msg,String base64Image})  
+#### shareToWhatsApp({String msg,String imagePath})  
+#### shareToWhatsApp4Biz({String msg,String imagePath})  
 #### shareToSystem({String msg})   use system share ui
 
 These methods will return "success" if they successfully jump to the corresponding app.
@@ -144,7 +144,7 @@ These methods will return "success" if they successfully jump to the correspondi
 | :------------ | :------------ |
 | String msg  | Text message  |
 | String url  | Url url  |
-| String base64Image  | Image base64  |
+| String imagePath  |The local path of the image   |
 
 ## Example
 ```

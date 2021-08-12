@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
-import 'package:flutter_share_me_example/constant.dart';
 
 enum Share { facebook, twitter, whatsapp, whatsapp_business, share_system }
 
@@ -67,7 +66,7 @@ class _MyAppState extends State<MyApp> {
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
         break;
       case Share.whatsapp:
-        response = await flutterShareMe.shareToWhatsApp(msg: msg, imagePath: base64Image);
+        response = await flutterShareMe.shareToWhatsApp(msg: msg);
         break;
       case Share.whatsapp_business:
         response = await flutterShareMe.shareToWhatsApp(msg: msg);
