@@ -33,6 +33,9 @@ class FlutterShareMe {
 
   ///share to WhatsApp
   /// @parm imageUrl is local image
+  ///
+  /// For ios
+  /// If include image then text params will be ingored as there is no current way in IOS share both at the same.
   Future<String?> shareToWhatsApp({String msg = '', String imageUrl = ''}) async {
     final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
@@ -49,6 +52,8 @@ class FlutterShareMe {
 
   ///share to WhatsApp4Biz
   /// @parm imageUrl is local image
+  /// For ios
+  /// If include image then text params will be ingored as there is no current way in IOS share both at the same.
   Future<String?> shareToWhatsApp4Biz({String msg = '', String imageUrl = ''}) async {
     final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
