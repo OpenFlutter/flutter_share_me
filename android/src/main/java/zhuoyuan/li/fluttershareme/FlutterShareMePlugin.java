@@ -204,7 +204,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 if (fileHelper.isFile()) {
                     whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileHelper.getUri());
-                    whatsappIntent.setType(fileHelper.getType());
+                    whatsappIntent.setType("image/*");
                 }
             }
             whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
