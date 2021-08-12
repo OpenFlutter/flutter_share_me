@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -16,6 +17,7 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -28,7 +30,6 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-import zhuoyuan.li.fluttershareme.util.FileUtil;
 
 /**
  * FlutterShareMePlugin
@@ -195,17 +196,15 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     private void shareWhatsApp(String url, String msg, Result result, boolean shareToWhatsAppBiz) {
         try {
             Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-            whatsappIntent.setType("text/plain");
+            whatsappIntent.setType("*/*");
             whatsappIntent.setPackage(shareToWhatsAppBiz ? "com.whatsapp.w4b" : "com.whatsapp");
             whatsappIntent.putExtra(Intent.EXTRA_TEXT, msg);
-
             if (!TextUtils.isEmpty(url)) {
-                FileUtil fileHelper = new FileUtil(activity, url);
-                if (fileHelper.isFile()) {
-                    whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileHelper.getUri());
-                    whatsappIntent.setType("image/*");
-                }
+                File file = new File(url);
+                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+                whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                //    whatsappIntent.setType("image/*");
             }
             whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(whatsappIntent);
