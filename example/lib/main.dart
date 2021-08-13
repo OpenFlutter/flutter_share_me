@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 enum Share { facebook, twitter, whatsapp, whatsapp_business, share_system }
 
@@ -12,6 +17,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String msg = 'hello,this is my github:https://github.com/lizhuoyuan';
+  File? file;
+  ImagePicker picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +33,7 @@ class _MyAppState extends State<MyApp> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 30),
+              ElevatedButton(onPressed: pickImage, child: Text('Pick Image')),
               ElevatedButton(
                   onPressed: () => onButtonTap(Share.twitter), child: Text('share to twitter')),
               ElevatedButton(
@@ -51,6 +59,26 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  void pickImage() async {
+    XFile? xFile = await picker.pickImage(source: ImageSource.camera);
+    print(xFile);
+    Uint8List u = await xFile!.readAsBytes();
+    await getFile();
+    if (!file!.existsSync()) {
+      file!.createSync();
+      print('create file:$file');
+    }
+    file!.writeAsBytesSync(u);
+    if (file!.existsSync()) {
+      print('image save success,path:${file!.path}');
+    }
+  }
+
+  Future<void> getFile() async {
+    Directory tempDir = await getTemporaryDirectory();
+    file = File('${tempDir.path}/img${DateTime.now()}.png');
+  }
+
   Future<void> onButtonTap(Share share) async {
     String msg =
         'Flutter share is great!!\n Check out full example at https://pub.dev/packages/flutter_share_me';
@@ -66,13 +94,15 @@ class _MyAppState extends State<MyApp> {
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
         break;
       case Share.whatsapp:
-        response = await flutterShareMe.shareToWhatsApp(msg: msg);
+        response = await flutterShareMe.shareToWhatsApp(msg: msg, imagePath: file!.path);
         break;
       case Share.whatsapp_business:
         response = await flutterShareMe.shareToWhatsApp(msg: msg);
+
         break;
       case Share.share_system:
         response = await flutterShareMe.shareToSystem(msg: msg);
+
         break;
     }
 
