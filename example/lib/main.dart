@@ -70,11 +70,9 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.whatsapp_business:
         response = await flutterShareMe.shareToWhatsApp(msg: msg);
-
         break;
       case Share.share_system:
         response = await flutterShareMe.shareToSystem(msg: msg);
-
         break;
     }
 
