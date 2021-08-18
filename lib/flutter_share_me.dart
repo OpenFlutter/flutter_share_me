@@ -33,12 +33,14 @@ class FlutterShareMe {
 
   ///share to WhatsApp
   /// [imagePath] is local image
+  /// [phoneNumber] enter phone number with counry code
   /// For ios
   /// If include image then text params will be ingored as there is no current way in IOS share both at the same.
-  Future<String?> shareToWhatsApp({String msg = '', String imagePath = ''}) async {
+  Future<String?> shareToWhatsApp({String msg = '', String imagePath = '',String phoneNumber=''}) async {
     final Map<String, dynamic> arguments = Map<String, dynamic>();
     arguments.putIfAbsent('msg', () => msg);
     arguments.putIfAbsent('url', () => imagePath);
+    arguments.putIfAbsent('phoneNumber', () => phoneNumber);
     dynamic result;
     try {
       result = await _channel.invokeMethod('shareWhatsApp', arguments);
