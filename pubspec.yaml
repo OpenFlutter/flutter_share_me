@@ -10,10 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  lint: ^1.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 
   # The following section is specific to Flutter.

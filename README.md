@@ -1,6 +1,7 @@
 # flutter_share_me
 
 [![pub package](https://img.shields.io/pub/v/flutter_share_me.svg)](https://pub.dartlang.org/packages/flutter_share_me)
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 
 Flutter Plugin for sharing contents to social media.
 

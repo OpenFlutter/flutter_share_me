@@ -16,7 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String msg = 'hello,this is my github:https://github.com/lizhuoyuan';
   File? file;
   ImagePicker picker = ImagePicker();
 
@@ -94,7 +93,12 @@ class _MyAppState extends State<MyApp> {
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
         break;
       case Share.whatsapp:
-        response = await flutterShareMe.shareToWhatsApp(msg: msg, imagePath: file!.path);
+        if(file!=null){
+          response = await flutterShareMe.shareToWhatsApp(msg: msg, imagePath: file!.path);
+        }else{
+          response = await flutterShareMe.shareToWhatsApp(msg: msg);
+        }
+
         break;
       case Share.whatsapp_business:
         response = await flutterShareMe.shareToWhatsApp(msg: msg);
