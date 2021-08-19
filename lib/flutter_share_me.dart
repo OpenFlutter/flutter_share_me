@@ -7,7 +7,7 @@ class FlutterShareMe {
   static const String _methodWhatsAppPersonal = 'whatsapp_personal';
   static const String _methodWhatsAppBusiness = 'whatsapp_business_share';
   static const String _methodFaceBook = 'facebook_share';
-  static const String _methodTwitter = 'twiiter_share';
+  static const String _methodTwitter = 'twitter_share';
   static const String _methodSystemShare = 'system_share';
 
   ///share to WhatsApp

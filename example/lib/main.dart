@@ -6,7 +6,14 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-enum Share { facebook, twitter, whatsapp, whatsapp_business, share_system }
+enum Share {
+  facebook,
+  twitter,
+  whatsapp,
+  whatsapp_personal,
+  whatsapp_business,
+  share_system
+}
 
 void main() => runApp(MyApp());
 
@@ -34,22 +41,27 @@ class _MyAppState extends State<MyApp> {
               SizedBox(height: 30),
               ElevatedButton(onPressed: pickImage, child: Text('Pick Image')),
               ElevatedButton(
-                  onPressed: () => onButtonTap(Share.twitter), child: Text('share to twitter')),
+                  onPressed: () => onButtonTap(Share.twitter),
+                  child: const Text('share to twitter')),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp),
-                child: Text('share to WhatsApp'),
+                child: const Text('share to WhatsApp'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp_business),
-                child: Text('share to WhatsApp  Business'),
+                child:const  Text('share to WhatsApp  Business'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.whatsapp_personal),
+                child: const Text('share to WhatsApp  Personal'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.facebook),
-                child: Text('share to  FaceBook'),
+                child:const  Text('share to  FaceBook'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
-                child: Text('share to System'),
+                child: const Text('share to System'),
               ),
             ],
           ),
@@ -93,12 +105,12 @@ class _MyAppState extends State<MyApp> {
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
         break;
       case Share.whatsapp:
-        if(file!=null){
-          response = await flutterShareMe.shareToWhatsApp(msg: msg, imagePath: file!.path);
-        }else{
+        if (file != null) {
+          response = await flutterShareMe.shareToWhatsApp(
+              msg: msg, imagePath: file!.path);
+        } else {
           response = await flutterShareMe.shareToWhatsApp(msg: msg);
         }
-
         break;
       case Share.whatsapp_business:
         response = await flutterShareMe.shareToWhatsApp(msg: msg);
@@ -106,7 +118,10 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_system:
         response = await flutterShareMe.shareToSystem(msg: msg);
-
+        break;
+      case Share.whatsapp_personal:
+        response = await flutterShareMe.shareWhatsAppPersonalMessage(
+            message: msg, phoneNumber: '918200188632');
         break;
     }
 
