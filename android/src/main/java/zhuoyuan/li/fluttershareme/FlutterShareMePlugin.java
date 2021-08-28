@@ -2,9 +2,12 @@ package zhuoyuan.li.fluttershareme;
 
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -18,8 +21,10 @@ import com.facebook.share.widget.ShareDialog;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -35,6 +40,16 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  * FlutterShareMePlugin
  */
 public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, ActivityAware {
+
+    final private static String _methodWhatsApp = "whatsapp_share";
+    final private static String _methodWhatsAppPersonal = "whatsapp_personal";
+    final private static String _methodWhatsAppBusiness = "whatsapp_business_share";
+    final private static String _methodFaceBook = "facebook_share";
+    final private static String _methodTwitter = "twitter_share";
+    final private static String _methodSystemShare = "system_share";
+    final private static String _methodInstagramShare = "instagram_share";
+
+
 
     private Activity activity;
     private static CallbackManager callbackManager;
@@ -77,29 +92,38 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     public void onMethodCall(MethodCall call, @NonNull Result result) {
         String url, msg;
         switch (call.method) {
-            case "shareFacebook":
+            case _methodFaceBook:
                 url = call.argument("url");
                 msg = call.argument("msg");
                 shareToFacebook(url, msg, result);
                 break;
-            case "shareTwitter":
+            case _methodTwitter:
                 url = call.argument("url");
                 msg = call.argument("msg");
                 shareToTwitter(url, msg, result);
                 break;
-            case "shareWhatsApp":
+            case _methodWhatsApp:
                 msg = call.argument("msg");
                 url = call.argument("url");
                 shareWhatsApp(url, msg, result, false);
                 break;
-            case "shareWhatsApp4Biz":
+            case _methodWhatsAppBusiness:
                 msg = call.argument("msg");
                 url = call.argument("url");
                 shareWhatsApp(url, msg, result, true);
                 break;
-            case "system":
+            case _methodWhatsAppPersonal:
+                msg = call.argument("msg");
+              String phoneNumber = call.argument("phoneNumber");
+                shareWhatsAppPersonal(msg,phoneNumber , result);
+                break;
+            case _methodSystemShare:
                 msg = call.argument("msg");
                 shareSystem(result, msg);
+                break;
+            case _methodInstagramShare:
+                msg = call.argument("url");
+                shareInstagramStory(msg,result);
                 break;
             default:
                 result.notImplemented();
@@ -132,6 +156,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      * @param msg    String
      * @param result Result
      */
+
     private void shareToTwitter(String url, String msg, Result result) {
         try {
             TweetComposer.Builder builder = new TweetComposer.Builder(activity)
@@ -193,25 +218,77 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      * @param result             Result
      * @param shareToWhatsAppBiz boolean
      */
-    private void shareWhatsApp(String url, String msg, Result result, boolean shareToWhatsAppBiz) {
+    private void shareWhatsApp(String imagePath, String msg, Result result, boolean shareToWhatsAppBiz) {
         try {
             Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-            whatsappIntent.setType("*/*");
+            whatsappIntent.setType("text/plain");
             whatsappIntent.setPackage(shareToWhatsAppBiz ? "com.whatsapp.w4b" : "com.whatsapp");
             whatsappIntent.putExtra(Intent.EXTRA_TEXT, msg);
-            if (!TextUtils.isEmpty(url)) {
-                File file = new File(url);
+            // if the url is the not empty then get url of the file and share
+            if (!TextUtils.isEmpty(imagePath)) {
+                File file = new File(imagePath);
                 Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
                 whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-                //    whatsappIntent.setType("image/*");
+                whatsappIntent.setType("image/jpeg");
+                whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
-            whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(whatsappIntent);
             result.success("success");
         } catch (Exception var9) {
             result.error("error", var9.toString(), "");
         }
+    }
+
+    /**
+     * share whatsapp message to personal number
+     *  @param msg String
+     * @param phoneNumber String with country code
+     * @param result
+     */
+    private  void shareWhatsAppPersonal(String msg, String phoneNumber, Result result){
+        String url = null;
+        try {
+            url = "https://api.whatsapp.com/send?phone="+phoneNumber +"&text=" + URLEncoder.encode(msg, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setPackage("com.whatsapp");
+        i.setData(Uri.parse(url));
+        activity.startActivity(i);
+        result.success("success");
+    }
+
+    /**
+     * share whatsapp message to personal number
+     * @param url local image path
+     * @param result flutterResult
+     */
+    private void shareInstagramStory(String url, Result result){
+        if(instagramInstalled()){
+            File file = new File(url);
+            Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+
+            Intent instagramIntent = new Intent(Intent.ACTION_SEND);
+            instagramIntent.setType("image/*");
+            instagramIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            instagramIntent.setPackage("com.instagram.android");
+            try {
+                activity.startActivity(instagramIntent);
+                result.success("Success");
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                result.success("Failure");
+            }
+            
+        }else{
+            result.error("Instagram not found","Instagram is not installed on device.","");
+        }
+
+
+
     }
 
     @Override
@@ -232,5 +309,23 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     @Override
     public void onDetachedFromActivity() {
 
+    }
+
+
+    ///Utils methods
+    private boolean instagramInstalled() {
+        try {
+            if (activity != null) {
+                activity.getPackageManager()
+                        .getApplicationInfo("com.instagram.android", 0);
+                return true;
+            } else {
+                Log.d("App","Instagram app is not installed on your device");
+                return false;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+//        return false;
     }
 }

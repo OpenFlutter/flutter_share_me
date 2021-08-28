@@ -1,12 +1,19 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-enum Share { facebook, twitter, whatsapp, whatsapp_business, share_system }
+enum Share {
+  facebook,
+  twitter,
+  whatsapp,
+  whatsapp_personal,
+  whatsapp_business,
+  share_system,
+  share_instagram
+}
 
 void main() => runApp(MyApp());
 
@@ -18,6 +25,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   File? file;
   ImagePicker picker = ImagePicker();
+  bool videoEnable = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +37,36 @@ class _MyAppState extends State<MyApp> {
         body: Container(
           width: double.infinity,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(onPressed: pickImage, child: Text('Pick Image')),
+              ElevatedButton(onPressed: pickVideo, child: Text('Pick Video')),
               ElevatedButton(
-                  onPressed: () => onButtonTap(Share.twitter), child: Text('share to twitter')),
+                  onPressed: () => onButtonTap(Share.twitter),
+                  child: const Text('share to twitter')),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp),
-                child: Text('share to WhatsApp'),
+                child: const Text('share to WhatsApp'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp_business),
-                child: Text('share to WhatsApp  Business'),
+                child: const Text('share to WhatsApp Business'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.whatsapp_personal),
+                child: const Text('share to WhatsApp Personal'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.facebook),
-                child: Text('share to  FaceBook'),
+                child: const Text('share to  FaceBook'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
-                child: Text('share to System'),
+                child: const Text('share to System'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_instagram),
+                child: const Text('share to Instagram'),
               ),
             ],
           ),
@@ -58,24 +75,22 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void pickImage() async {
-    XFile? xFile = await picker.pickImage(source: ImageSource.camera);
+  Future<void> pickImage() async {
+    final XFile? xFile = await picker.pickImage(source: ImageSource.gallery);
     print(xFile);
-    Uint8List u = await xFile!.readAsBytes();
-    await getFile();
-    if (!file!.existsSync()) {
-      file!.createSync();
-      print('create file:$file');
-    }
-    file!.writeAsBytesSync(u);
-    if (file!.existsSync()) {
-      print('image save success,path:${file!.path}');
-    }
+    file = File(xFile!.path);
+    setState(() {
+      videoEnable = false;
+    });
   }
 
-  Future<void> getFile() async {
-    Directory tempDir = await getTemporaryDirectory();
-    file = File('${tempDir.path}/img${DateTime.now()}.png');
+  Future<void> pickVideo() async {
+    final XFile? xFile = await picker.pickVideo(source: ImageSource.camera);
+    print(xFile);
+    file = File(xFile!.path);
+    setState(() {
+      videoEnable = true;
+    });
   }
 
   Future<void> onButtonTap(Share share) async {
@@ -84,7 +99,7 @@ class _MyAppState extends State<MyApp> {
     String url = 'https://pub.dev/packages/flutter_share_me';
 
     String? response;
-    FlutterShareMe flutterShareMe = FlutterShareMe();
+    final FlutterShareMe flutterShareMe = FlutterShareMe();
     switch (share) {
       case Share.facebook:
         response = await flutterShareMe.shareToFacebook(url: url, msg: msg);
@@ -93,12 +108,13 @@ class _MyAppState extends State<MyApp> {
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);
         break;
       case Share.whatsapp:
-        if(file!=null){
-          response = await flutterShareMe.shareToWhatsApp(msg: msg, imagePath: file!.path);
-        }else{
+        if (file != null) {
+          response = await flutterShareMe.shareToWhatsApp(
+              imagePath: file!.path,
+              fileType: videoEnable ? FileType.video : FileType.image);
+        } else {
           response = await flutterShareMe.shareToWhatsApp(msg: msg);
         }
-
         break;
       case Share.whatsapp_business:
         response = await flutterShareMe.shareToWhatsApp(msg: msg);
@@ -106,8 +122,16 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_system:
         response = await flutterShareMe.shareToSystem(msg: msg);
-
         break;
+      case Share.whatsapp_personal:
+        response = await flutterShareMe.shareWhatsAppPersonalMessage(
+            message: msg, phoneNumber: '+919574957435');
+        break;
+      case Share.share_instagram:
+        // TODO: Handle this case.
+        response = await flutterShareMe.shareToInstagram(
+            imagePath: file!.path
+            );
     }
 
     print(response);

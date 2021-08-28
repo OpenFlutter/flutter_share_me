@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Thsi app needs mic access</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app nedds photo acess</string>
 	<key>NSCameraUsageDescription</key>
@@ -19,6 +21,7 @@
 	<string>343254889799245</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>instagram</string>
 		<string>twitter</string>
 		<string>fbauth2</string>
 		<string>whatsapp</string>
