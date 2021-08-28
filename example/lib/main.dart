@@ -11,7 +11,8 @@ enum Share {
   whatsapp,
   whatsapp_personal,
   whatsapp_business,
-  share_system
+  share_system,
+  share_instagram
 }
 
 void main() => runApp(MyApp());
@@ -49,11 +50,11 @@ class _MyAppState extends State<MyApp> {
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp_business),
-                child: const Text('share to WhatsApp  Business'),
+                child: const Text('share to WhatsApp Business'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.whatsapp_personal),
-                child: const Text('share to WhatsApp  Personal'),
+                child: const Text('share to WhatsApp Personal'),
               ),
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.facebook),
@@ -62,6 +63,10 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
                 child: const Text('share to System'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_instagram),
+                child: const Text('share to Instagram'),
               ),
             ],
           ),
@@ -122,6 +127,11 @@ class _MyAppState extends State<MyApp> {
         response = await flutterShareMe.shareWhatsAppPersonalMessage(
             message: msg, phoneNumber: '+919574957435');
         break;
+      case Share.share_instagram:
+        // TODO: Handle this case.
+        response = await flutterShareMe.shareToInstagram(
+            imagePath: file!.path
+            );
     }
 
     print(response);
