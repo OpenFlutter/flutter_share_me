@@ -2,7 +2,9 @@ package zhuoyuan.li.fluttershareme;
 
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,6 +47,8 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodFaceBook = "facebook_share";
     final private static String _methodTwitter = "twitter_share";
     final private static String _methodSystemShare = "system_share";
+    final private static String _methodInstagramShare = "instagram_share";
+
 
 
     private Activity activity;
@@ -116,6 +120,10 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             case _methodSystemShare:
                 msg = call.argument("msg");
                 shareSystem(result, msg);
+                break;
+            case _methodInstagramShare:
+                msg = call.argument("url");
+                shareInstagramStory(msg,result);
                 break;
             default:
                 result.notImplemented();
@@ -253,6 +261,36 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
         result.success("success");
     }
 
+    /**
+     * share whatsapp message to personal number
+     * @param url local image path
+     * @param result flutterResult
+     */
+    private void shareInstagramStory(String url, Result result){
+        if(instagramInstalled()){
+            File file = new File(url);
+            Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+
+            Intent instagramIntent = new Intent(Intent.ACTION_SEND);
+            instagramIntent.setType("image/*");
+            instagramIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            instagramIntent.setPackage("com.instagram.android");
+            try {
+                activity.startActivity(instagramIntent);
+                result.success("Success");
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                result.success("Failure");
+            }
+            
+        }else{
+            result.error("Instagram not found","Instagram is not installed on device.","");
+        }
+
+
+
+    }
+
     @Override
     public void onAttachedToActivity(ActivityPluginBinding binding) {
         activity = binding.getActivity();
@@ -271,5 +309,23 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     @Override
     public void onDetachedFromActivity() {
 
+    }
+
+
+    ///Utils methods
+    private boolean instagramInstalled() {
+        try {
+            if (activity != null) {
+                activity.getPackageManager()
+                        .getApplicationInfo("com.instagram.android", 0);
+                return true;
+            } else {
+                Log.d("App","Instagram app is not installed on your device");
+                return false;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+//        return false;
     }
 }
