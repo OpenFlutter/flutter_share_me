@@ -210,20 +210,21 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      * @param result             Result
      * @param shareToWhatsAppBiz boolean
      */
-    private void shareWhatsApp(String url, String msg, Result result, boolean shareToWhatsAppBiz) {
+    private void shareWhatsApp(String imagePath, String msg, Result result, boolean shareToWhatsAppBiz) {
         try {
             Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-            whatsappIntent.setType("*/*");
+            whatsappIntent.setType("text/plain");
             whatsappIntent.setPackage(shareToWhatsAppBiz ? "com.whatsapp.w4b" : "com.whatsapp");
             whatsappIntent.putExtra(Intent.EXTRA_TEXT, msg);
-            if (!TextUtils.isEmpty(url)) {
-                File file = new File(url);
+            // if the url is the not empty then get url of the file and share
+            if (!TextUtils.isEmpty(imagePath)) {
+                File file = new File(imagePath);
                 Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
                 whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-                //    whatsappIntent.setType("image/*");
+                whatsappIntent.setType("image/jpeg");
+                whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
-            whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(whatsappIntent);
             result.success("success");
         } catch (Exception var9) {
