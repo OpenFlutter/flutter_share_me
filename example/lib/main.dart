@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 enum Share {
   facebook,
@@ -61,12 +60,12 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('share to  FaceBook'),
               ),
               ElevatedButton(
-                onPressed: () => onButtonTap(Share.share_system),
-                child: const Text('share to System'),
-              ),
-              ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_instagram),
                 child: const Text('share to Instagram'),
+              ),
+              ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_system),
+                child: const Text('share to System'),
               ),
             ],
           ),
@@ -110,8 +109,7 @@ class _MyAppState extends State<MyApp> {
       case Share.whatsapp:
         if (file != null) {
           response = await flutterShareMe.shareToWhatsApp(
-              imagePath: file!.path,
-              fileType: videoEnable ? FileType.video : FileType.image);
+              imagePath: file!.path, fileType: videoEnable ? FileType.video : FileType.image);
         } else {
           response = await flutterShareMe.shareToWhatsApp(msg: msg);
         }
@@ -129,11 +127,9 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_instagram:
         // TODO: Handle this case.
-        response = await flutterShareMe.shareToInstagram(
-            imagePath: file!.path
-            );
+        response = await flutterShareMe.shareToInstagram(imagePath: file!.path);
+        break;
     }
-
-    print(response);
+    debugPrint(response);
   }
 }
