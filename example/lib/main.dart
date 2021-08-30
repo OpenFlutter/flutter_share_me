@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:image_picker/image_picker.dart';
 
+///sharing platform
 enum Share {
   facebook,
   twitter,

@@ -262,7 +262,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     }
 
     /**
-     * share whatsapp message to personal number
+     * share to instagram
      * @param url local image path
      * @param result flutterResult
      */
