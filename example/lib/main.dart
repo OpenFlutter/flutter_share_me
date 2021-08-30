@@ -117,7 +117,6 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.whatsapp_business:
         response = await flutterShareMe.shareToWhatsApp(msg: msg);
-
         break;
       case Share.share_system:
         response = await flutterShareMe.shareToSystem(msg: msg);
@@ -127,7 +126,6 @@ class _MyAppState extends State<MyApp> {
             message: msg, phoneNumber: '+919574957435');
         break;
       case Share.share_instagram:
-        // TODO: Handle this case.
         response = await flutterShareMe.shareToInstagram(imagePath: file!.path);
         break;
     }

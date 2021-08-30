@@ -1,3 +1,6 @@
+# 1.1.1
+- readme
+
 # 1.1.0
 - Able to share direct message WhatsApp.
 - Able to share video on Android & IOS WhatsApp.
