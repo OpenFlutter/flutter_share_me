@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.whatsapp_personal:
         response = await flutterShareMe.shareWhatsAppPersonalMessage(
-            message: msg, phoneNumber: 'phone-number-with-country-cooe');
+            message: msg, phoneNumber: 'phone-number-with-country-code');
         break;
       case Share.share_instagram:
         response = await flutterShareMe.shareToInstagram(imagePath: file!.path);
