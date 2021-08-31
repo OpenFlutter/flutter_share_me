@@ -1,3 +1,6 @@
+# 1.1.2
+- change example demo
+
 # 1.1.1
 - readme
 
