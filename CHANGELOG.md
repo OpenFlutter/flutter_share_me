@@ -1,3 +1,6 @@
+# 1.1.3
+- fix #48 Update flutter_share_me.podspec	
+
 # 1.1.2
 - change example demo
 
