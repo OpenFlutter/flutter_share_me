@@ -1,7 +1,6 @@
 import Flutter
 import UIKit
-import FacebookShare
-import FacebookCore
+import FBSDKShareKit
 import PhotosUI
 public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate {
     
