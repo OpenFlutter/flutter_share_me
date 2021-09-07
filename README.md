@@ -5,7 +5,7 @@
 
 Flutter Plugin for sharing contents to social media.
 
-You can use it share to Facebook , WhatsApp(WhatsAppBusiness) , Twitter And System Share UI. 
+You can use it share to Facebook , Instagram , WhatsApp(WhatsAppBusiness) , Twitter And System Share UI. 
 Support Url and Text.
 
 support:
