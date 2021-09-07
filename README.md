@@ -9,7 +9,7 @@ You can use it share to Facebook , Instagram , WhatsApp(WhatsAppBusiness) , Twit
 Support Url and Text.
 
 support:
- - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,System Share
+ - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,Instagram,System Share
 
 **Note: This plugin is still under development, and some APIs might not be available yet.  
 Feedback and Pull Requests are most welcome!**
