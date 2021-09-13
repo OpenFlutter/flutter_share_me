@@ -1,3 +1,6 @@
+# 1.1.4
+- fix #54 android share whatsapp failed(only text)
+
 # 1.1.3
 - fix #48 Update flutter_share_me.podspec	
 
