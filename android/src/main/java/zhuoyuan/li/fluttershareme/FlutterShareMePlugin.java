@@ -48,6 +48,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodTwitter = "twitter_share";
     final private static String _methodSystemShare = "system_share";
     final private static String _methodInstagramShare = "instagram_share";
+    final private static String _methodTelegramShare = "telegram_share";
 
 
     private Activity activity;
@@ -123,6 +124,10 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             case _methodInstagramShare:
                 msg = call.argument("url");
                 shareInstagramStory(msg, result);
+                break;
+            case _methodTelegramShare:
+                msg = call.argument("msg");
+                shareToTelegram(msg, result);
                 break;
             default:
                 result.notImplemented();
@@ -242,7 +247,30 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             result.error("error", var9.toString(), "");
         }
     }
-
+      /**
+     * share to telegram
+     *
+     * @param msg                String
+     * @param result             Result
+     */
+    
+    private void shareToTelegram(String msg, Result result) {
+        try {
+            String message = call.argument("msg");
+            Intent telegramIntent = new Intent(Intent.ACTION_SEND);
+            telegramIntent.setType("text/plain");
+            telegramIntent.setPackage("org.telegram.messenger");
+            telegramIntent.putExtra(Intent.EXTRA_TEXT, message);
+            try {
+                startActivity(telegramIntent);
+                result.success("true");
+            } catch (Exception ex) {
+                result.success("false");
+            }
+        } catch (Exception var9) {
+            result.error("error", var9.toString(), "");
+        }
+    }
     /**
      * share whatsapp message to personal number
      *

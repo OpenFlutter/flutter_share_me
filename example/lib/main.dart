@@ -12,7 +12,8 @@ enum Share {
   whatsapp_personal,
   whatsapp_business,
   share_system,
-  share_instagram
+  share_instagram,
+  share_telegram
 }
 
 void main() => runApp(MyApp());
@@ -65,6 +66,10 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('share to Instagram'),
               ),
               ElevatedButton(
+                onPressed: () => onButtonTap(Share.share_telegram),
+                child: const Text('share to Telegram'),
+              ),
+              ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_system),
                 child: const Text('share to System'),
               ),
@@ -110,7 +115,8 @@ class _MyAppState extends State<MyApp> {
       case Share.whatsapp:
         if (file != null) {
           response = await flutterShareMe.shareToWhatsApp(
-              imagePath: file!.path, fileType: videoEnable ? FileType.video : FileType.image);
+              imagePath: file!.path,
+              fileType: videoEnable ? FileType.video : FileType.image);
         } else {
           response = await flutterShareMe.shareToWhatsApp(msg: msg);
         }
@@ -127,6 +133,9 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_instagram:
         response = await flutterShareMe.shareToInstagram(imagePath: file!.path);
+        break;
+      case Share.share_telegram:
+        response = await flutterShareMe.shareToTelegram(msg: msg);
         break;
     }
     debugPrint(response);

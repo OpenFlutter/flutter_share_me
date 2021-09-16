@@ -15,6 +15,7 @@ class FlutterShareMe {
   static const String _methodTwitter = 'twitter_share';
   static const String _methodInstagramShare = 'instagram_share';
   static const String _methodSystemShare = 'system_share';
+  static const String _methodTelegramShare = 'telegram_share';
 
   ///share to WhatsApp
   /// [imagePath] is local image
@@ -58,6 +59,20 @@ class FlutterShareMe {
       return e.toString();
     }
 
+    return result;
+  }
+  ///share to Telegram
+  /// [msg] message text you want on telegram
+  Future<String?> shareToTelegram(
+      {required String msg}) async {
+    final Map<String, dynamic> arguments = <String, dynamic>{};
+    arguments.putIfAbsent('msg', () => msg);
+    String? result;
+    try {
+      result = await _channel.invokeMethod<String>(_methodTelegramShare, arguments);
+    } catch (e) {
+      return e.toString();
+    }
     return result;
   }
 

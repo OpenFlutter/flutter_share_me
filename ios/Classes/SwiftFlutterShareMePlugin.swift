@@ -12,6 +12,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     let _methodTwitter = "twitter_share";
     let _methodInstagram = "instagram_share";
     let _methodSystemShare = "system_share";
+    let _methodTelegramShare = "telegram_share";
     
     var result: FlutterResult?
     var documentInteractionController: UIDocumentInteractionController?
@@ -55,7 +56,6 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
         else if(call.method.elementsEqual(_methodWhatsAppPersonal)){
             let args = call.arguments as? Dictionary<String,Any>
-            
             shareWhatsAppPersonal(message: args!["msg"]as! String, phoneNumber: args!["phoneNumber"]as! String, result: result)
         }
         else if(call.method.elementsEqual(_methodFaceBook)){
@@ -69,6 +69,10 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         else if(call.method.elementsEqual(_methodInstagram)){
             let args = call.arguments as? Dictionary<String,Any>
             shareInstagram(args: args!)
+        }
+        else if(call.method.elementsEqual(_methodTelegramShare)){
+            let args = call.arguments as? Dictionary<String,Any>
+            shareToTelegram(message: args!["msg"] as! String )
         }
         else{
             let args = call.arguments as? Dictionary<String,Any>
@@ -218,10 +222,27 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
             }
         }
         
-        
-        
     }
+    //share via telegram
+    //@ text that you want to share.
+    func shareToTelegram(message: String,result: @escaping FlutterResult )
+    {
+        let telegram = "tg://msg?text=\(message)"
+        var characterSet = CharacterSet.urlQueryAllowed
+        characterSet.insert(charactersIn: "?&")
+        let telegramURL  = NSURL(string: telegram.addingPercentEncoding(withAllowedCharacters: characterSet)!)
+        if UIApplication.shared.canOpenURL(telegramURL! as URL)
+        {
+            result("Sucess");
+            UIApplication.shared.openURL(telegramURL! as URL)
+        }
+        else
+        {
+            result(FlutterError(code: "Not found", message: "WhatsAppBusiness is not found", details: "WhatsAppBusiness not intalled or Check url scheme."));
+        }
     
+    }
+
     //share via system native dialog
     //@ text that you want to share.
     func systemShare(message:String,result: @escaping FlutterResult)  {
