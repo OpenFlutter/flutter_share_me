@@ -72,7 +72,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
         else if(call.method.elementsEqual(_methodTelegramShare)){
             let args = call.arguments as? Dictionary<String,Any>
-            shareToTelegram(message: args!["msg"] as! String )
+            shareToTelegram(message: args!["msg"] as! String, result: result )
         }
         else{
             let args = call.arguments as? Dictionary<String,Any>
@@ -238,7 +238,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
         else
         {
-            result(FlutterError(code: "Not found", message: "WhatsAppBusiness is not found", details: "WhatsAppBusiness not intalled or Check url scheme."));
+            result(FlutterError(code: "Not found", message: "telegram is not found", details: "telegram not intalled or Check url scheme."));
         }
     
     }

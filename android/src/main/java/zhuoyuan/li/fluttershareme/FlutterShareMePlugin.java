@@ -256,16 +256,15 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     
     private void shareToTelegram(String msg, Result result) {
         try {
-            String message = call.argument("msg");
             Intent telegramIntent = new Intent(Intent.ACTION_SEND);
             telegramIntent.setType("text/plain");
             telegramIntent.setPackage("org.telegram.messenger");
-            telegramIntent.putExtra(Intent.EXTRA_TEXT, message);
+            telegramIntent.putExtra(Intent.EXTRA_TEXT, msg);
             try {
-                startActivity(telegramIntent);
+                activity.startActivity(telegramIntent);
                 result.success("true");
             } catch (Exception ex) {
-                result.success("false");
+                result.success("false:Telegram app is not installed on your device");
             }
         } catch (Exception var9) {
             result.error("error", var9.toString(), "");
