@@ -5,7 +5,7 @@
 
 Flutter Plugin for sharing contents to social media.
 
-You can use it share to Facebook , Instagram , WhatsApp(WhatsAppBusiness) , Twitter And System Share UI. 
+You can use it share to Facebook , Instagram , WhatsApp(WhatsAppBusiness) , Twitter, telegram And System Share UI. 
 Support Url and Text.
 
 support:
@@ -79,8 +79,7 @@ make sure you add below deatils in your plist file.
 ```
 Note-: Make sure you add fb in  at start of your fb Id in CFBundleURLSchemes.
 
-Add below value in url scheme.
-
+Add below value in url scheme(Refer to example).
 
 
 ```<key>LSApplicationQueriesSchemes</key>
@@ -101,6 +100,7 @@ Add below value in url scheme.
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
+		<string>tg</string>
 	</array>
 ```
 
@@ -146,6 +146,9 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 
 ### instagram
 #### shareToInstagram({String imagePath}) 
+
+### telegram
+#### shareToTelegram({String msg})
 
 ### system
 #### shareToSystem({String msg})   use system share ui

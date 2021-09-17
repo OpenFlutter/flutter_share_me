@@ -1,3 +1,6 @@
+# 1.2.0
+- support telegram
+
 # 1.1.4
 - fix #54 android share whatsapp failed(only text)
 
