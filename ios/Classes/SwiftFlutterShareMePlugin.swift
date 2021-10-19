@@ -113,7 +113,8 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
                         result("File format not supported Please check the file.")
                         return;
                     }
-                    urlData=UIImageJPEGRepresentation(image!, 1.0)!
+                    //urlData=UIImageJPEGRepresentation(image!, 1.0)!
+                    urlData = image.jpegData(compressionQuality: 1.0)!
                     filePath=URL(fileURLWithPath:NSHomeDirectory()).appendingPathComponent("Documents/whatsAppTmp.wai")
                 }else{
                     filePath=URL(fileURLWithPath:NSTemporaryDirectory()).appendingPathComponent("video.m4v")
