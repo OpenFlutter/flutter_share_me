@@ -48,7 +48,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodTwitter = "twitter_share";
     final private static String _methodSystemShare = "system_share";
     final private static String _methodInstagramShare = "instagram_share";
-
+    final private static String _methodTelegramShare = "telegram_share";
 
 
     private Activity activity;
@@ -114,8 +114,8 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 break;
             case _methodWhatsAppPersonal:
                 msg = call.argument("msg");
-              String phoneNumber = call.argument("phoneNumber");
-                shareWhatsAppPersonal(msg,phoneNumber , result);
+                String phoneNumber = call.argument("phoneNumber");
+                shareWhatsAppPersonal(msg, phoneNumber, result);
                 break;
             case _methodSystemShare:
                 msg = call.argument("msg");
@@ -123,7 +123,11 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 break;
             case _methodInstagramShare:
                 msg = call.argument("url");
-                shareInstagramStory(msg,result);
+                shareInstagramStory(msg, result);
+                break;
+            case _methodTelegramShare:
+                msg = call.argument("msg");
+                shareToTelegram(msg, result);
                 break;
             default:
                 result.notImplemented();
@@ -221,17 +225,21 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     private void shareWhatsApp(String imagePath, String msg, Result result, boolean shareToWhatsAppBiz) {
         try {
             Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-            whatsappIntent.setType("text/plain");
+            
             whatsappIntent.setPackage(shareToWhatsAppBiz ? "com.whatsapp.w4b" : "com.whatsapp");
             whatsappIntent.putExtra(Intent.EXTRA_TEXT, msg);
             // if the url is the not empty then get url of the file and share
             if (!TextUtils.isEmpty(imagePath)) {
+                whatsappIntent.setType("*/*");
+                System.out.print(imagePath+"url is not empty");
                 File file = new File(imagePath);
                 Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
                 whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 whatsappIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-                whatsappIntent.setType("image/jpeg");
                 whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+            else {
+                whatsappIntent.setType("text/plain");
             }
             activity.startActivity(whatsappIntent);
             result.success("success");
@@ -239,21 +247,43 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             result.error("error", var9.toString(), "");
         }
     }
-
+      /**
+     * share to telegram
+     *
+     * @param msg                String
+     * @param result             Result
+     */
+    
+    private void shareToTelegram(String msg, Result result) {
+        try {
+            Intent telegramIntent = new Intent(Intent.ACTION_SEND);
+            telegramIntent.setType("text/plain");
+            telegramIntent.setPackage("org.telegram.messenger");
+            telegramIntent.putExtra(Intent.EXTRA_TEXT, msg);
+            try {
+                activity.startActivity(telegramIntent);
+                result.success("true");
+            } catch (Exception ex) {
+                result.success("false:Telegram app is not installed on your device");
+            }
+        } catch (Exception var9) {
+            result.error("error", var9.toString(), "");
+        }
+    }
     /**
      * share whatsapp message to personal number
-     *  @param msg String
+     *
+     * @param msg         String
      * @param phoneNumber String with country code
      * @param result
      */
-    private  void shareWhatsAppPersonal(String msg, String phoneNumber, Result result){
+    private void shareWhatsAppPersonal(String msg, String phoneNumber, Result result) {
         String url = null;
         try {
-            url = "https://api.whatsapp.com/send?phone="+phoneNumber +"&text=" + URLEncoder.encode(msg, "UTF-8");
+            url = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + URLEncoder.encode(msg, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setPackage("com.whatsapp");
         i.setData(Uri.parse(url));
@@ -263,11 +293,12 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
 
     /**
      * share to instagram
-     * @param url local image path
+     *
+     * @param url    local image path
      * @param result flutterResult
      */
-    private void shareInstagramStory(String url, Result result){
-        if(instagramInstalled()){
+    private void shareInstagramStory(String url, Result result) {
+        if (instagramInstalled()) {
             File file = new File(url);
             Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
 
@@ -282,13 +313,9 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 e.printStackTrace();
                 result.success("Failure");
             }
-            
-        }else{
-            result.error("Instagram not found","Instagram is not installed on device.","");
+        } else {
+            result.error("Instagram not found", "Instagram is not installed on device.", "");
         }
-
-
-
     }
 
     @Override
@@ -311,7 +338,6 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
 
     }
 
-
     ///Utils methods
     private boolean instagramInstalled() {
         try {
@@ -320,7 +346,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                         .getApplicationInfo("com.instagram.android", 0);
                 return true;
             } else {
-                Log.d("App","Instagram app is not installed on your device");
+                Log.d("App", "Instagram app is not installed on your device");
                 return false;
             }
         } catch (PackageManager.NameNotFoundException e) {

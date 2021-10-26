@@ -5,11 +5,11 @@
 
 Flutter Plugin for sharing contents to social media.
 
-You can use it share to Facebook , WhatsApp(WhatsAppBusiness) , Twitter And System Share UI. 
+You can use it share to Facebook , Instagram , WhatsApp(WhatsAppBusiness) , Twitter And System Share UI. 
 Support Url and Text.
 
 support:
- - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,System Share
+ - Android & iOS :  Facebook,WhatsApp(WhatsAppBusiness),Twitter,Instagram,System Share
 
 **Note: This plugin is still under development, and some APIs might not be available yet.  
 Feedback and Pull Requests are most welcome!**
@@ -133,10 +133,21 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 
 ## Methods
 
+### facebook
 #### shareToFacebook({String msg, String url})   
+
+### twitter
 #### shareToTwitter({String msg, String url})   
+
+### whatsapp
 #### shareToWhatsApp({String msg,String imagePath})  
-#### shareToWhatsApp4Biz({String msg,String imagePath})  
+#### shareToWhatsApp4Biz({String msg,String imagePath})  (only android)
+#### shareWhatsAppPersonalMessage(String message ,String phoneNumber)
+
+### instagram
+#### shareToInstagram({String imagePath}) 
+
+### system
 #### shareToSystem({String msg})   use system share ui
 
 These methods will return "success" if they successfully jump to the corresponding app.

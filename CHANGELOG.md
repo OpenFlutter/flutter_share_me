@@ -1,3 +1,21 @@
+# 1.1.4
+- fix #54 android share whatsapp failed(only text)
+
+# 1.1.3
+- fix #48 Update flutter_share_me.podspec	
+
+# 1.1.2
+- change example demo
+
+# 1.1.1
+- readme
+
+# 1.1.0
+- Able to share direct message WhatsApp.
+- Able to share video on Android & IOS WhatsApp.
+- Able to share stories on Instagram.
+- Breaking change- There is no more WhatsApp Business support on ios. if call WB in IOS throws method unImplemented error.
+
 # 1.0.0
 
 - support share image to whatsapp(Use image path instead of base64)
