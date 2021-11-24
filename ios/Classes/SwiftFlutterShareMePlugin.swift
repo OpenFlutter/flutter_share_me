@@ -273,13 +273,23 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     // share image via instagram stories.
     // @ args image url
     func shareInstagram(args:Dictionary<String,Any>)  {
-        let imageUrl=args["url"] as! String
+        let fileUrl=args["url"] as! String
+        let type=args["fileType"] as! String
     
-        let image = UIImage(named: imageUrl)
-        if(image==nil){
+        var image:UIImage?
+        var video:URL?
+
+        if(type == "image") {
+            image = UIImage(named: fileUrl)
+        } else if(type == "video") {
+            video = URL(fileURLWithPath: fileUrl)
+        }
+
+        if(image==nil && video==nil){
             self.result!("File format not supported Please check the file.")
             return;
         }
+
         guard let instagramURL = NSURL(string: "instagram://app") else {
             if let result = result {
                 self.result?("Instagram app is not installed on your device")
@@ -290,8 +300,20 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         
         do{
             try PHPhotoLibrary.shared().performChangesAndWait {
-                let request = PHAssetChangeRequest.creationRequestForAsset(from: image!)
-                let assetId = request.placeholderForCreatedAsset?.localIdentifier
+                var request:PHAssetChangeRequest?
+                
+                if(image != nil) {
+                    request = PHAssetChangeRequest.creationRequestForAsset(from: image!)
+                } else if (video != nil) {
+                    request = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: video!)
+                }
+
+                if(request==nil){
+                    self.result!("An error occured while saving the file.")
+                    return;
+                }
+                
+                let assetId = request!.placeholderForCreatedAsset?.localIdentifier
                 let instShareUrl:String? = "instagram://library?LocalIdentifier=" + assetId!
                 
                 //Share image
