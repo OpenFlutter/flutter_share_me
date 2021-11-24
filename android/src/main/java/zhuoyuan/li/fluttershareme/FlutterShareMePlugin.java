@@ -123,7 +123,8 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 break;
             case _methodInstagramShare:
                 msg = call.argument("url");
-                shareInstagramStory(msg, result);
+                fileType = call.argument("fileType");
+                shareInstagramStory(msg, fileType, result);
                 break;
             case _methodTelegramShare:
                 msg = call.argument("msg");
@@ -294,16 +295,20 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     /**
      * share to instagram
      *
-     * @param url    local image path
-     * @param result flutterResult
+     * @param url      local file path
+     * @param fileType type of file to share (image or video)
+     * @param result   flutterResult
      */
-    private void shareInstagramStory(String url, Result result) {
+    private void shareInstagramStory(String url, String fileType, Result result) {
         if (instagramInstalled()) {
             File file = new File(url);
             Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
 
             Intent instagramIntent = new Intent(Intent.ACTION_SEND);
-            instagramIntent.setType("image/*");
+            if(fileType == "image")
+                instagramIntent.setType("image/*");
+            else if(fileType == "video")
+                instagramIntent.setType("video/*");
             instagramIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
             instagramIntent.setPackage("com.instagram.android");
             try {
