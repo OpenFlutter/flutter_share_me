@@ -90,7 +90,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      */
     @Override
     public void onMethodCall(MethodCall call, @NonNull Result result) {
-        String url, msg;
+        String url, msg, fileType;
         switch (call.method) {
             case _methodFaceBook:
                 url = call.argument("url");
@@ -305,9 +305,9 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
 
             Intent instagramIntent = new Intent(Intent.ACTION_SEND);
-            if(fileType == "image")
+            if(fileType.equals("image"))
                 instagramIntent.setType("image/*");
-            else if(fileType == "video")
+            else if(fileType.equals("video"))
                 instagramIntent.setType("video/*");
             instagramIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
             instagramIntent.setPackage("com.instagram.android");
