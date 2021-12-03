@@ -279,6 +279,8 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         var image:UIImage?
         var video:URL?
 
+        var assetId:String?
+
         if(type == "image") {
             image = UIImage(named: fileUrl)
         } else if(type == "video") {
@@ -299,7 +301,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
         
         do{
-            try PHPhotoLibrary.shared().performChangesAndWait {
+            try PHPhotoLibrary.shared().performChanges({
                 var request:PHAssetChangeRequest?
                 
                 if(image != nil) {
@@ -313,27 +315,39 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
                     return;
                 }
                 
-                let assetId = request!.placeholderForCreatedAsset?.localIdentifier
-                let instShareUrl:String? = "instagram://library?LocalIdentifier=" + assetId!
-                
-                //Share image
-                if UIApplication.shared.canOpenURL(instagramURL as URL) {
-                    if let sharingUrl = instShareUrl {
-                        if let urlForRedirect = NSURL(string: sharingUrl) {
-                            if #available(iOS 10.0, *) {
-                                UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
-                            }
-                            else{
-                                UIApplication.shared.openURL(urlForRedirect as URL)
-                            }
-                        }
-                        self.result?("Success")
+                assetId = request!.placeholderForCreatedAsset?.localIdentifier
+            }, completionHandler: { success, error in 
+                DispatchQueue.main.async {
+                    guard error == nil else {
+                        // handle error
+                        print(error)
+                        return
                     }
-                } else{
-                    self.result?("Instagram app is not installed on your device")
+                    guard let assetId = assetId else {
+                        // highly unlikely that it'll be nil,
+                        // but you should handle this error just in case
+                        return
+                    }
+
+                    let instShareUrl:String? = "instagram://library?LocalIdentifier=" + assetId
+                    //Share image
+                    if UIApplication.shared.canOpenURL(instagramURL as URL) {
+                        if let sharingUrl = instShareUrl {
+                            if let urlForRedirect = NSURL(string: sharingUrl) {
+                                if #available(iOS 10.0, *) {
+                                    UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
+                                }
+                                else{
+                                    UIApplication.shared.openURL(urlForRedirect as URL)
+                                }
+                            }
+                            self.result?("Success")
+                        }
+                    } else{
+                        self.result?("Instagram app is not installed on your device")
+                    }
                 }
-            }
-        
+            })
         } catch {
             print("Fail")
         }
