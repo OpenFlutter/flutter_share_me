@@ -273,13 +273,25 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     // share image via instagram stories.
     // @ args image url
     func shareInstagram(args:Dictionary<String,Any>)  {
-        let imageUrl=args["url"] as! String
+        let fileUrl=args["url"] as! String
+        let type=args["fileType"] as! String
     
-        let image = UIImage(named: imageUrl)
-        if(image==nil){
+        var image:UIImage?
+        var video:URL?
+
+        var assetId:String?
+
+        if(type == "image") {
+            image = UIImage(named: fileUrl)
+        } else if(type == "video") {
+            video = URL(fileURLWithPath: fileUrl)
+        }
+
+        if(image==nil && video==nil){
             self.result!("File format not supported Please check the file.")
             return;
         }
+
         guard let instagramURL = NSURL(string: "instagram://app") else {
             if let result = result {
                 self.result?("Instagram app is not installed on your device")
@@ -289,29 +301,53 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
         
         do{
-            try PHPhotoLibrary.shared().performChangesAndWait {
-                let request = PHAssetChangeRequest.creationRequestForAsset(from: image!)
-                let assetId = request.placeholderForCreatedAsset?.localIdentifier
-                let instShareUrl:String? = "instagram://library?LocalIdentifier=" + assetId!
+            try PHPhotoLibrary.shared().performChanges({
+                var request:PHAssetChangeRequest?
                 
-                //Share image
-                if UIApplication.shared.canOpenURL(instagramURL as URL) {
-                    if let sharingUrl = instShareUrl {
-                        if let urlForRedirect = NSURL(string: sharingUrl) {
-                            if #available(iOS 10.0, *) {
-                                UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
-                            }
-                            else{
-                                UIApplication.shared.openURL(urlForRedirect as URL)
-                            }
-                        }
-                        self.result?("Success")
-                    }
-                } else{
-                    self.result?("Instagram app is not installed on your device")
+                if(image != nil) {
+                    request = PHAssetChangeRequest.creationRequestForAsset(from: image!)
+                } else if (video != nil) {
+                    request = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: video!)
                 }
-            }
-        
+
+                if(request==nil){
+                    self.result!("An error occured while saving the file.")
+                    return;
+                }
+                
+                assetId = request!.placeholderForCreatedAsset?.localIdentifier
+            }, completionHandler: { success, error in 
+                DispatchQueue.main.async {
+                    guard error == nil else {
+                        // handle error
+                        print(error)
+                        return
+                    }
+                    guard let assetId = assetId else {
+                        // highly unlikely that it'll be nil,
+                        // but you should handle this error just in case
+                        return
+                    }
+
+                    let instShareUrl:String? = "instagram://library?LocalIdentifier=" + assetId
+                    //Share image
+                    if UIApplication.shared.canOpenURL(instagramURL as URL) {
+                        if let sharingUrl = instShareUrl {
+                            if let urlForRedirect = NSURL(string: sharingUrl) {
+                                if #available(iOS 10.0, *) {
+                                    UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
+                                }
+                                else{
+                                    UIApplication.shared.openURL(urlForRedirect as URL)
+                                }
+                            }
+                            self.result?("Success")
+                        }
+                    } else{
+                        self.result?("Instagram app is not installed on your device")
+                    }
+                }
+            })
         } catch {
             print("Fail")
         }

@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Thsi app needs mic access</string>
+	<string>This app needs mic access to use image_picker</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app nedds photo acess</string>
+	<string>This app nedds photo acess to use image_picker</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access</string>
+	<string>This app needs camera access to use image_picker</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

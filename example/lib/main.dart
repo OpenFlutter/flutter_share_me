@@ -83,19 +83,23 @@ class _MyAppState extends State<MyApp> {
   Future<void> pickImage() async {
     final XFile? xFile = await picker.pickImage(source: ImageSource.gallery);
     print(xFile);
-    file = File(xFile!.path);
-    setState(() {
-      videoEnable = false;
-    });
+    if (xFile != null) {
+      file = File(xFile.path);
+      setState(() {
+        videoEnable = false;
+      });
+    }
   }
 
   Future<void> pickVideo() async {
-    final XFile? xFile = await picker.pickVideo(source: ImageSource.camera);
+    final XFile? xFile = await picker.pickVideo(source: ImageSource.gallery);
     print(xFile);
-    file = File(xFile!.path);
-    setState(() {
-      videoEnable = true;
-    });
+    if (xFile != null) {
+      file = File(xFile.path);
+      setState(() {
+        videoEnable = true;
+      });
+    }
   }
 
   Future<void> onButtonTap(Share share) async {
@@ -132,7 +136,9 @@ class _MyAppState extends State<MyApp> {
             message: msg, phoneNumber: 'phone-number-with-country-code');
         break;
       case Share.share_instagram:
-        response = await flutterShareMe.shareToInstagram(imagePath: file!.path);
+        response = await flutterShareMe.shareToInstagram(
+            filePath: file!.path,
+            fileType: videoEnable ? FileType.video : FileType.image);
         break;
       case Share.share_telegram:
         response = await flutterShareMe.shareToTelegram(msg: msg);

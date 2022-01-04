@@ -145,7 +145,7 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 #### shareWhatsAppPersonalMessage(String message ,String phoneNumber)
 
 ### instagram
-#### shareToInstagram({String imagePath}) 
+#### shareToInstagram({String filePath, FileType fileType})
 
 ### telegram
 #### shareToTelegram({String msg})
