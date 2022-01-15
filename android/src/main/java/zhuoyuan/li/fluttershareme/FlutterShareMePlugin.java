@@ -17,6 +17,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.MessageDialog;
 import com.facebook.share.widget.ShareDialog;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
@@ -45,6 +46,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodWhatsAppPersonal = "whatsapp_personal";
     final private static String _methodWhatsAppBusiness = "whatsapp_business_share";
     final private static String _methodFaceBook = "facebook_share";
+    final private static String _methodMessenger = "messenger_share";
     final private static String _methodTwitter = "twitter_share";
     final private static String _methodSystemShare = "system_share";
     final private static String _methodInstagramShare = "instagram_share";
@@ -96,6 +98,11 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 url = call.argument("url");
                 msg = call.argument("msg");
                 shareToFacebook(url, msg, result);
+                break;
+            case _methodMessenger:
+                url = call.argument("url");
+                msg = call.argument("msg");
+                shareToMessenger(url, msg, result);
                 break;
             case _methodTwitter:
                 url = call.argument("url");
@@ -214,6 +221,43 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             result.success("success");
         }
 
+    }
+
+    /**
+     * share to Messenger
+     *
+     * @param url    String
+     * @param msg    String
+     * @param result Result
+     */
+    private void shareToMessenger(String url, String msg, Result result) {
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(url))
+                .setQuote(msg)
+                .build();
+        MessageDialog shareDialog = new MessageDialog(activity);
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                System.out.println("--------------------success");
+            }
+
+            @Override
+            public void onCancel() {
+                System.out.println("-----------------onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                System.out.println("---------------onError");
+            }
+        });
+
+        if (shareDialog.canShow(content)) {
+            shareDialog.show(content);
+            result.success("success");
+        }
+        result.error("error", "Cannot share thought messenger", "");
     }
 
     /**
