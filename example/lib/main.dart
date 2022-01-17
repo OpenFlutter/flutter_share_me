@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 ///sharing platform
 enum Share {
   facebook,
+  messenger,
   twitter,
   whatsapp,
   whatsapp_personal,
@@ -62,6 +63,10 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('share to  FaceBook'),
               ),
               ElevatedButton(
+                onPressed: () => onButtonTap(Share.messenger),
+                child: const Text('share to  Messenger'),
+              ),
+              ElevatedButton(
                 onPressed: () => onButtonTap(Share.share_instagram),
                 child: const Text('share to Instagram'),
               ),
@@ -112,6 +117,9 @@ class _MyAppState extends State<MyApp> {
     switch (share) {
       case Share.facebook:
         response = await flutterShareMe.shareToFacebook(url: url, msg: msg);
+        break;
+      case Share.messenger:
+        response = await flutterShareMe.shareToMessenger(url: url, msg: msg);
         break;
       case Share.twitter:
         response = await flutterShareMe.shareToTwitter(url: url, msg: msg);

@@ -9,6 +9,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     let _methodWhatsAppPersonal = "whatsapp_personal";
     let _methodWhatsAppBusiness = "whatsapp_business_share";
     let _methodFaceBook = "facebook_share";
+    let _methodMessenger = "messenger_share";
     let _methodTwitter = "twitter_share";
     let _methodInstagram = "instagram_share";
     let _methodSystemShare = "system_share";
@@ -61,7 +62,10 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         else if(call.method.elementsEqual(_methodFaceBook)){
             let args = call.arguments as? Dictionary<String,Any>
             sharefacebook(message: args!, result: result)
-            
+        }
+        else if(call.method.elementsEqual(_methodMessenger)){
+            let args = call.arguments as? Dictionary<String,Any>
+            shareMessenger(message: args!, result: result)
         }else if(call.method.elementsEqual(_methodTwitter)){
             let args = call.arguments as? Dictionary<String,Any>
             shareTwitter(message: args!["msg"] as! String, url: args!["url"] as! String, result: result)
@@ -197,6 +201,20 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         shareDialog.show()
         result("Sucess")
         
+    }
+    
+    // share messenger
+    // params
+    // @ map conting meesage and url
+    
+    func shareMessenger(message:Dictionary<String,Any>, result: @escaping FlutterResult)  {
+        let shareContent = ShareLinkContent()
+        shareContent.contentURL = URL.init(string: message["url"] as! String)!
+        shareContent.quote = message["msg"] as? String
+        
+        let shareDialog = MessageDialog(content: shareContent, delegate: self)
+        shareDialog.show()
+        result("Sucess")
     }
     
     // share twitter params
