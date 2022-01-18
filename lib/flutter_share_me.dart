@@ -12,6 +12,7 @@ class FlutterShareMe {
   static const String _methodWhatsAppPersonal = 'whatsapp_personal';
   static const String _methodWhatsAppBusiness = 'whatsapp_business_share';
   static const String _methodFaceBook = 'facebook_share';
+  static const String _methodMessenger = 'messenger_share';
   static const String _methodTwitter = 'twitter_share';
   static const String _methodInstagramShare = 'instagram_share';
   static const String _methodSystemShare = 'system_share';
@@ -115,6 +116,21 @@ class FlutterShareMe {
     }
     return result;
   }
+
+  ///share to messenger
+  Future<String?> shareToMessenger({required String msg, String url = ''}) async {
+    final Map<String, dynamic> arguments = <String, dynamic>{};
+    arguments.putIfAbsent('msg', () => msg);
+    arguments.putIfAbsent('url', () => url);
+    String? result;
+    try {
+      result = await _channel.invokeMethod<String?>(_methodMessenger, arguments);
+    } catch (e) {
+      return e.toString();
+    }
+    return result;
+  }
+
 
   ///share to twitter
   ///[msg] string that you want share.
