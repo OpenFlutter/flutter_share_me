@@ -9,7 +9,6 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     let _methodWhatsAppPersonal = "whatsapp_personal";
     let _methodWhatsAppBusiness = "whatsapp_business_share";
     let _methodFaceBook = "facebook_share";
-    let _methodMessenger = "messenger_share";
     let _methodTwitter = "twitter_share";
     let _methodInstagram = "instagram_share";
     let _methodSystemShare = "system_share";
@@ -62,10 +61,7 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         else if(call.method.elementsEqual(_methodFaceBook)){
             let args = call.arguments as? Dictionary<String,Any>
             sharefacebook(message: args!, result: result)
-        }
-        else if(call.method.elementsEqual(_methodMessenger)){
-            let args = call.arguments as? Dictionary<String,Any>
-            shareMessenger(message: args!, result: result)
+            
         }else if(call.method.elementsEqual(_methodTwitter)){
             let args = call.arguments as? Dictionary<String,Any>
             shareTwitter(message: args!["msg"] as! String, url: args!["url"] as! String, result: result)
@@ -203,20 +199,6 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         
     }
     
-    // share messenger
-    // params
-    // @ map conting meesage and url
-    
-    func shareMessenger(message:Dictionary<String,Any>, result: @escaping FlutterResult)  {
-        let shareContent = ShareLinkContent()
-        shareContent.contentURL = URL.init(string: message["url"] as! String)!
-        shareContent.quote = message["msg"] as? String
-        
-        let shareDialog = MessageDialog(content: shareContent, delegate: self)
-        shareDialog.show()
-        result("Sucess")
-    }
-    
     // share twitter params
     // @ message
     // @ url
@@ -291,25 +273,13 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
     // share image via instagram stories.
     // @ args image url
     func shareInstagram(args:Dictionary<String,Any>)  {
-        let fileUrl=args["url"] as! String
-        let type=args["fileType"] as! String
+        let imageUrl=args["url"] as! String
     
-        var image:UIImage?
-        var video:URL?
-
-        var assetId:String?
-
-        if(type == "image") {
-            image = UIImage(named: fileUrl)
-        } else if(type == "video") {
-            video = URL(fileURLWithPath: fileUrl)
-        }
-
-        if(image==nil && video==nil){
+        let image = UIImage(named: imageUrl)
+        if(image==nil){
             self.result!("File format not supported Please check the file.")
             return;
         }
-
         guard let instagramURL = NSURL(string: "instagram://app") else {
             if let result = result {
                 self.result?("Instagram app is not installed on your device")
@@ -319,53 +289,29 @@ public class SwiftFlutterShareMePlugin: NSObject, FlutterPlugin, SharingDelegate
         }
         
         do{
-            try PHPhotoLibrary.shared().performChanges({
-                var request:PHAssetChangeRequest?
+            try PHPhotoLibrary.shared().performChangesAndWait {
+                let request = PHAssetChangeRequest.creationRequestForAsset(from: image!)
+                let assetId = request.placeholderForCreatedAsset?.localIdentifier
+                let instShareUrl:String? = "instagram://library?LocalIdentifier=" + assetId!
                 
-                if(image != nil) {
-                    request = PHAssetChangeRequest.creationRequestForAsset(from: image!)
-                } else if (video != nil) {
-                    request = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: video!)
-                }
-
-                if(request==nil){
-                    self.result!("An error occured while saving the file.")
-                    return;
-                }
-                
-                assetId = request!.placeholderForCreatedAsset?.localIdentifier
-            }, completionHandler: { success, error in 
-                DispatchQueue.main.async {
-                    guard error == nil else {
-                        // handle error
-                        print(error)
-                        return
-                    }
-                    guard let assetId = assetId else {
-                        // highly unlikely that it'll be nil,
-                        // but you should handle this error just in case
-                        return
-                    }
-
-                    let instShareUrl:String? = "instagram://library?LocalIdentifier=" + assetId
-                    //Share image
-                    if UIApplication.shared.canOpenURL(instagramURL as URL) {
-                        if let sharingUrl = instShareUrl {
-                            if let urlForRedirect = NSURL(string: sharingUrl) {
-                                if #available(iOS 10.0, *) {
-                                    UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
-                                }
-                                else{
-                                    UIApplication.shared.openURL(urlForRedirect as URL)
-                                }
+                //Share image
+                if UIApplication.shared.canOpenURL(instagramURL as URL) {
+                    if let sharingUrl = instShareUrl {
+                        if let urlForRedirect = NSURL(string: sharingUrl) {
+                            if #available(iOS 10.0, *) {
+                                UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
                             }
-                            self.result?("Success")
+                            else{
+                                UIApplication.shared.openURL(urlForRedirect as URL)
+                            }
                         }
-                    } else{
-                        self.result?("Instagram app is not installed on your device")
+                        self.result?("Success")
                     }
+                } else{
+                    self.result?("Instagram app is not installed on your device")
                 }
-            })
+            }
+        
         } catch {
             print("Fail")
         }
