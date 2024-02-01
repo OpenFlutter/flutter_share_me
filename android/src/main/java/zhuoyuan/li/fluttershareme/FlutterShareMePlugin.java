@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.content.pm.ResolveInfo;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -17,6 +19,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.MessageDialog;
 import com.facebook.share.widget.ShareDialog;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
@@ -25,6 +28,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -45,9 +50,16 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodWhatsAppPersonal = "whatsapp_personal";
     final private static String _methodWhatsAppBusiness = "whatsapp_business_share";
     final private static String _methodFaceBook = "facebook_share";
+    final private static String _methodMessenger = "messenger_share";
+
+    final private static String _methodMessengerNew = "messenger_share_new";
     final private static String _methodTwitter = "twitter_share";
+
+    final private static String _methodTwitterNew = "twitter_share_new";
     final private static String _methodSystemShare = "system_share";
     final private static String _methodInstagramShare = "instagram_share";
+
+    final private static String _methodInstagramShareNew = "instagram_share_new";
     final private static String _methodTelegramShare = "telegram_share";
 
 
@@ -90,17 +102,30 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      */
     @Override
     public void onMethodCall(MethodCall call, @NonNull Result result) {
-        String url, msg;
+        String url, msg, fileType;
         switch (call.method) {
             case _methodFaceBook:
                 url = call.argument("url");
                 msg = call.argument("msg");
                 shareToFacebook(url, msg, result);
                 break;
+            case _methodMessenger:
+                url = call.argument("url");
+                msg = call.argument("msg");
+                shareToMessenger(url, msg, result);
+                break;
+            case _methodMessengerNew:
+                msg = call.argument("msg");
+                shareToMessengerNew( msg, result);
+                break;
             case _methodTwitter:
                 url = call.argument("url");
                 msg = call.argument("msg");
                 shareToTwitter(url, msg, result);
+                break;
+            case _methodTwitterNew:
+                msg = call.argument("msg");
+                shareToTwitterNew(msg, result);
                 break;
             case _methodWhatsApp:
                 msg = call.argument("msg");
@@ -123,7 +148,13 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 break;
             case _methodInstagramShare:
                 msg = call.argument("url");
-                shareInstagramStory(msg, result);
+                fileType = call.argument("fileType");
+                shareInstagramStory(msg, fileType, result);
+                break;
+
+            case _methodInstagramShareNew:
+                msg = call.argument("msg");
+                shareInstagramNew(msg,  result);
                 break;
             case _methodTelegramShare:
                 msg = call.argument("msg");
@@ -176,6 +207,48 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
         }
     }
 
+    private void shareToTwitterNew(String msg,  Result result) {
+        if (twitterInstalled()) {
+            List<Intent> targetedShareIntents = new ArrayList<Intent>();
+
+            Intent textIntent = new Intent(Intent.ACTION_SEND);
+            textIntent.setType("text/plain");
+            textIntent.putExtra(Intent.EXTRA_TEXT, msg);
+
+            List<ResolveInfo> resInfo = activity.getPackageManager().queryIntentActivities(textIntent, 0);
+
+            for (ResolveInfo resolveInfo : resInfo) {
+                String packageName = resolveInfo.activityInfo.packageName;
+
+                Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                targetedShareIntent.setType("text/plain");
+                targetedShareIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                targetedShareIntent.setPackage(packageName);
+
+                if (packageName.equals("com.twitter.android")) { // Add only instagram
+                    targetedShareIntents.add(targetedShareIntent);
+                }
+            }
+
+            Intent chooserIntent = Intent.createChooser(
+                    targetedShareIntents.remove(0), "Select how to share");
+
+            chooserIntent.putExtra(
+                    Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+
+            try {
+                activity.startActivity(chooserIntent);
+                result.success("Success");
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                result.success("Failure");
+            }
+
+        } else {
+            result.error("Twitter not found", "Twitter is not installed on device.", "");
+        }
+    }
+
     /**
      * share to Facebook
      *
@@ -215,6 +288,85 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
 
     }
 
+    /**
+     * share to Messenger
+     *
+     * @param url    String
+     * @param msg    String
+     * @param result Result
+     */
+    private void shareToMessenger(String url, String msg, Result result) {
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(url))
+                .setQuote(msg)
+                .build();
+        MessageDialog shareDialog = new MessageDialog(activity);
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                System.out.println("--------------------success");
+            }
+
+            @Override
+            public void onCancel() {
+                System.out.println("-----------------onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                System.out.println("---------------onError");
+            }
+        });
+
+        if (shareDialog.canShow(content)) {
+            shareDialog.show(content);
+            result.success("success");
+        }
+        result.error("error", "Cannot share thought messenger", "");
+    }
+
+
+    private void shareToMessengerNew(String msg,  Result result) {
+        if (messengerInstalled()) {
+            List<Intent> targetedShareIntents = new ArrayList<Intent>();
+
+            Intent textIntent = new Intent(Intent.ACTION_SEND);
+            textIntent.setType("text/plain");
+            textIntent.putExtra(Intent.EXTRA_TEXT, msg);
+
+            List<ResolveInfo> resInfo = activity.getPackageManager().queryIntentActivities(textIntent, 0);
+
+            for (ResolveInfo resolveInfo : resInfo) {
+                String packageName = resolveInfo.activityInfo.packageName;
+
+                Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                targetedShareIntent.setType("text/plain");
+                targetedShareIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                targetedShareIntent.setPackage(packageName);
+
+                if (packageName.equals("com.facebook.orca")) { // Add only instagram
+                    targetedShareIntents.add(targetedShareIntent);
+                }
+            }
+
+            Intent chooserIntent = Intent.createChooser(
+                    targetedShareIntents.remove(0), "Select how to share");
+
+            chooserIntent.putExtra(
+                    Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+
+            try {
+                activity.startActivity(chooserIntent);
+                result.success("Success");
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                result.success("Failure");
+            }
+
+        } else {
+            result.error("Messenger not found", "Messenger is not installed on device.", "");
+        }
+    }
     /**
      * share to whatsapp
      *
@@ -294,16 +446,20 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     /**
      * share to instagram
      *
-     * @param url    local image path
-     * @param result flutterResult
+     * @param url      local file path
+     * @param fileType type of file to share (image or video)
+     * @param result   flutterResult
      */
-    private void shareInstagramStory(String url, Result result) {
+    private void shareInstagramStory(String url, String fileType, Result result) {
         if (instagramInstalled()) {
             File file = new File(url);
             Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
 
             Intent instagramIntent = new Intent(Intent.ACTION_SEND);
-            instagramIntent.setType("image/*");
+            if(fileType.equals("image"))
+                instagramIntent.setType("image/*");
+            else if(fileType.equals("video"))
+                instagramIntent.setType("video/*");
             instagramIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
             instagramIntent.setPackage("com.instagram.android");
             try {
@@ -313,6 +469,53 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 e.printStackTrace();
                 result.success("Failure");
             }
+        } else {
+            result.error("Instagram not found", "Instagram is not installed on device.", "");
+        }
+    }
+
+    private void shareInstagramNew(String msg,  Result result) {
+        if (instagramInstalled()) {
+            List<Intent> targetedShareIntents = new ArrayList<Intent>();
+
+            Intent textIntent = new Intent(Intent.ACTION_SEND);
+            textIntent.setType("text/plain");
+            textIntent.putExtra(Intent.EXTRA_TEXT, msg);
+
+            List<ResolveInfo> resInfo = activity.getPackageManager().queryIntentActivities(textIntent, 0);
+
+            for (ResolveInfo resolveInfo : resInfo) {
+                String packageName = resolveInfo.activityInfo.packageName;
+
+                Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                targetedShareIntent.setType("text/plain");
+                targetedShareIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                targetedShareIntent.setPackage(packageName);
+
+                if (packageName.equals("com.instagram.android")) { // Add only instagram
+                    targetedShareIntents.add(targetedShareIntent);
+                }
+            }
+
+            //Intent i = new Intent(this);
+            //targetedShareIntents.add(i);
+
+            Intent chooserIntent = Intent.createChooser(
+                    targetedShareIntents.remove(0), "Select how to share");
+
+            chooserIntent.putExtra(
+                    Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+
+            try {
+                activity.startActivity(chooserIntent);
+                result.success("Success");
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                result.success("Failure");
+            }
+
+
+
         } else {
             result.error("Instagram not found", "Instagram is not installed on device.", "");
         }
@@ -347,6 +550,38 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 return true;
             } else {
                 Log.d("App", "Instagram app is not installed on your device");
+                return false;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+//        return false;
+    }
+
+    private boolean twitterInstalled() {
+        try {
+            if (activity != null) {
+                activity.getPackageManager()
+                        .getApplicationInfo("com.twitter.android", 0);
+                return true;
+            } else {
+                Log.d("App", "Twitter app is not installed on your device");
+                return false;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+//        return false;
+    }
+
+    private boolean messengerInstalled() {
+        try {
+            if (activity != null) {
+                activity.getPackageManager()
+                        .getApplicationInfo("com.facebook.orca", 0);
+                return true;
+            } else {
+                Log.d("App", "Messenger app is not installed on your device");
                 return false;
             }
         } catch (PackageManager.NameNotFoundException e) {
